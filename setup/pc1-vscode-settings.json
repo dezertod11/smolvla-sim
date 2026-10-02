@@ -1,5 +1,4 @@
 {
-  "dev.containers.dockerPath": "/home/alexander/projects/smolvla-sim/scripts/docker.sh",
   "terminal.integrated.profiles.linux": {
     "SmolVLA tmux": {
       "path": "/bin/bash",

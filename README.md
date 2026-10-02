@@ -6,8 +6,12 @@ H100 предназначен прежде всего для обучения.
 
 ## Запуск на ПК-1
 
-Открыть `setup/Open-PC1.ps1` на ноутбуке либо подключиться в VS Code к
-`nlp-pc-2026` и открыть `/home/alexander/projects/smolvla-sim`.
+Запустить `setup/Open-PC1.ps1` на ноутбуке. Он открывает VS Code с отдельным
+каталогом настроек `%LOCALAPPDATA%\SmolVLA-VSCode`, подключается к
+`nlp-pc-2026` и открывает `/home/alexander/projects/smolvla-sim`.
+Отдельные настройки нужны для Docker CLI проекта: этот параметр VS Code
+имеет область application и игнорируется в workspace settings.
+Обычные настройки редактора для учебных проектов сохраняются.
 
 В терминале WSL:
 
