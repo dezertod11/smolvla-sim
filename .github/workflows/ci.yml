@@ -1,0 +1,13 @@
+name: CPU checks
+on: [push, pull_request]
+jobs:
+  checks:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy==2.2.6 PyYAML==6.0.2 pytest==8.4.2 ruff==0.14.1
+      - run: ruff check .
+      - run: pytest -q

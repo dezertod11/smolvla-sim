@@ -1,0 +1,5 @@
+{
+  "files.eol": "\n",
+  "files.exclude": {"**/__pycache__": true},
+  "terminal.integrated.defaultProfile.windows": "PowerShell"
+}

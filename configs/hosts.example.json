@@ -1,0 +1,15 @@
+{
+  "pc1": {
+    "ssh_alias": "nlp-pc-2026",
+    "project_dir": "/home/alexander/projects/smolvla-sim",
+    "data_dir": "/mnt/d/Robotics/smolvla-sim"
+  },
+  "h100": {
+    "ssh_alias": "mlspace-sr006",
+    "allowed_root": "/home/jovyan/shares/SR006.nfs2/spiridonov/malnev_world_model",
+    "project_dir": "/home/jovyan/shares/SR006.nfs2/spiridonov/malnev_world_model/smolvla-sim",
+    "training_gpus": [2, 3, 4, 5, 6, 7],
+    "smoke_gpus": [1, 2, 3, 4, 5, 6, 7],
+    "forbidden_gpus": [0]
+  }
+}

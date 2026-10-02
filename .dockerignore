@@ -1,0 +1,14 @@
+.git
+.venv*
+.tools
+.runtime
+.external
+.secrets
+.env
+data
+outputs
+checkpoints
+**/__pycache__
+ros2_ws/build
+ros2_ws/install
+ros2_ws/log

@@ -1,0 +1,13 @@
+{
+  "dev.containers.dockerPath": "/home/alexander/projects/smolvla-sim/scripts/docker.sh",
+  "terminal.integrated.profiles.linux": {
+    "SmolVLA tmux": {
+      "path": "/bin/bash",
+      "args": ["-lc", "if [ -x /home/alexander/projects/smolvla-sim/scripts/open_tmux.sh ]; then exec /home/alexander/projects/smolvla-sim/scripts/open_tmux.sh; else exec /bin/bash; fi"],
+      "overrideName": true
+    },
+    "Bash": {"path": "/bin/bash"}
+  },
+  "terminal.integrated.defaultProfile.linux": "SmolVLA tmux",
+  "terminal.integrated.automationProfile.linux": {"path": "/bin/bash"}
+}

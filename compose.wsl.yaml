@@ -1,0 +1,13 @@
+services:
+  dev:
+    group_add:
+      - "${WSL_VIDEO_GID:-44}"
+      - "${WSL_RENDER_GID:-992}"
+    environment:
+      GALLIUM_DRIVER: d3d12
+      LD_LIBRARY_PATH: /usr/lib/wsl/lib:/opt/ros/jazzy/lib:/opt/ros/jazzy/lib/x86_64-linux-gnu
+    devices:
+      - /dev/dxg:/dev/dxg
+      - /dev/dri:/dev/dri
+    volumes:
+      - /usr/lib/wsl:/usr/lib/wsl:ro

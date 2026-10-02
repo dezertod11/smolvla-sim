@@ -1,0 +1,2 @@
+# ROS Jazzy colcon-core requires setuptools < 80; H100 does not install colcon.
+setuptools==79.0.1

@@ -1,0 +1,14 @@
+{
+  "reference": {
+    "repo_id": "HuggingFaceVLA/smolvla_libero",
+    "revision": "6721902bc4d61e50a3bfdb11dfb4cb626f05d102"
+  },
+  "base": {
+    "repo_id": "lerobot/smolvla_base",
+    "revision": "d9f33c94a60fb382c90dea2164c96845bd955e28"
+  },
+  "dataset": {
+    "repo_id": "HuggingFaceVLA/libero",
+    "revision": "86958911c0f959db2bbbdb107eb3e17c5f9c798e"
+  }
+}
