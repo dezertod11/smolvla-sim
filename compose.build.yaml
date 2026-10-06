@@ -1,0 +1,6 @@
+# Explicit opt-in: never included by Dev Containers.
+services:
+  dev:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile

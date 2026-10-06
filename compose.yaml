@@ -2,9 +2,7 @@ name: smolvla-sim
 services:
   dev:
     image: smolvla-sim:dev
-    build:
-      context: .
-      dockerfile: docker/Dockerfile
+    pull_policy: never
     init: true
     user: "1000:1000"
     working_dir: /workspace
