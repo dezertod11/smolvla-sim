@@ -4,6 +4,27 @@
 Ноутбук используется для VS Code. На ПК-1 работают Docker, LIBERO и ROS2;
 H100 предназначен прежде всего для обучения.
 
+**Сейчас готово окружение и каркас проекта.** Дообучение, полная оценка,
+квантизация политики и рабочий контур из двух ROS2-узлов ещё не реализованы.
+Текущий Compose запускает среду разработки; это пока не финальный
+`docker compose up` с эпизодами, требуемый для сдачи.
+
+## Документы и начало работы с Codex
+
+- [`AGENTS.md`](AGENTS.md) — правила для агента, среды, ограничения и проверки.
+- [`docs/TASK.md`](docs/TASK.md) — полный исходный текст задания и чек-лист приёмки.
+- [`docs/STATUS.md`](docs/STATUS.md) — выполненная работа, доказательства и следующий этап.
+- Этот README — назначение проекта и команды запуска.
+
+В Codex внутри VS Code можно начать сообщением:
+
+> Прочитай AGENTS.md и указанные в нём документы. Проверь рабочую папку,
+> состояние Git и путь к Python. Объясни, что уже готово, и предложи план
+> следующего этапа из docs/STATUS.md. Пока не запускай обучение и не меняй среду.
+
+Исходное задание сохранено в репозитории, поэтому доступ к DOCX в Downloads
+на ноутбуке для продолжения работы не требуется.
+
 Актуальная конфигурация и результаты переноса на D: описаны в
 [`setup/RECOVERY_2026-10-06.md`](setup/RECOVERY_2026-10-06.md).
 
@@ -18,7 +39,8 @@ H100 предназначен прежде всего для обучения.
 имеет область application и игнорируется в workspace settings.
 Обычные настройки редактора для учебных проектов сохраняются.
 
-В терминале WSL:
+Следующие команды выполняются **в Ubuntu WSL на ПК-1**, из
+`/home/alexander/projects/smolvla-sim`, вне контейнера:
 
 ```bash
 cp -n .env.example .env
@@ -47,9 +69,29 @@ bash scripts/pc1.sh exec dev bash scripts/eval_reference.sh
 
 В VS Code установить Dev Containers в удалённом контексте и выбрать
 **Dev Containers: Reopen in Container**. Python контейнера: `/opt/venv/bin/python`.
-Для обычного терминала с сохранением процесса: `bash scripts/open_tmux.sh`.
+Для терминала WSL с сохранением процесса: `bash scripts/open_tmux.sh`.
 Отсоединение от tmux: Ctrl+B, затем D. Для длительных команд можно запускать
 `bash scripts/pc1.sh exec -T dev ...` из tmux.
+
+**В терминале VS Code внутри контейнера** команды выполняются напрямую:
+
+```bash
+cd /workspace
+python -m pytest -q
+ruff check .
+```
+
+Python уже установлен в `/opt/venv/bin/python`, активировать ещё одну venv не нужно.
+Полная проверка среды: `bash scripts/check.sh`; отдельно ROS-инфраструктура:
+`bash scripts/check_ros_package.sh`; один reference-эпизод:
+`bash scripts/eval_reference.sh` (может скачивать веса).
+Wrapper `scripts/pc1.sh` предназначен для WSL хоста, не для вложенного запуска
+Docker из контейнера. Код меняется без пересборки образа.
+
+`/workspace` подключён к исходникам WSL, `/data` — к данным на D:.
+Обе папки сохраняются при пересоздании контейнера. Закрытие VS Code не
+останавливает контейнер (`shutdownAction: none`); для длительных вычислений
+используйте tmux и сохраняйте логи отдельно.
 
 Проект использует отдельный Docker CLI config в `.runtime/docker-cli`, чтобы
 не зависеть от старого credential helper Docker Desktop. Команды проекта
@@ -84,9 +126,14 @@ Windows OpenSSH: приватный ключ остаётся на ПК-1. Пр�
 
 ```bash
 cd /home/jovyan/shares/SR006.nfs2/spiridonov/malnev_world_model/smolvla-sim
-bash scripts/bootstrap_h100.sh
 .venv/bin/python scripts/h100_run.py --mode smoke -- .venv/bin/python scripts/h100_cuda_check.py
 ```
+
+Для восстановления окружения есть `bash scripts/bootstrap_h100.sh`;
+на подготовленном сервере повторять его при каждом подключении не нужно.
+Команды H100 выполняются в
+терминале сервера, не в контейнере ПК-1. Из WSL ПК-1 вход также доступен через
+`bash scripts/h100_ssh.sh --interactive`.
 
 Профиль H100 использует отдельный lock с CUDA 12.6 для проверенного драйвера
 560.35.03; ПК-1 использует CUDA 12.8 для Blackwell. Python и код одинаковые.
