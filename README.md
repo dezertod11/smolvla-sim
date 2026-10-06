@@ -6,7 +6,9 @@ H100 предназначен прежде всего для обучения.
 
 ## Запуск на ПК-1
 
-Запустить `setup/Open-PC1.ps1` на ноутбуке. Он открывает VS Code с отдельным
+Запустить Docker Desktop на ПК-1, затем `setup/Open-PC1.cmd` на ноутбуке.
+Этот launcher запускает PowerShell-скрипт с разрешением только для своего процесса,
+не меняя постоянную Execution Policy. Он открывает VS Code с отдельным
 каталогом настроек `%LOCALAPPDATA%\SmolVLA-VSCode`, подключается к
 `nlp-pc-2026` и открывает `/home/alexander/projects/smolvla-sim`.
 Отдельные настройки нужны для Docker CLI проекта: этот параметр VS Code
@@ -22,7 +24,7 @@ bash scripts/pc1.sh exec dev bash scripts/check.sh
 ```
 
 Образ уже собран. `bash scripts/pc1.sh build` нужен после изменений Dockerfile;
-перед пересборкой проверьте место на Windows C:, где расположен диск WSL.
+перед пересборкой проверьте место на диске хранилища Docker Desktop и на C:.
 Обычный запуск и Dev Containers используют только готовый образ: сборка вынесена
 в `compose.build.yaml`, загрузка отсутствующего образа запрещена. Если образ
 не найден, сначала проверьте Docker Engine; не запускайте сборку автоматически.
