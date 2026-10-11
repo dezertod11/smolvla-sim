@@ -53,7 +53,7 @@ def validate(spec):
         raise ValueError("Invalid run ID")
     if spec["backend"] not in {"pc1", "h100", "cpu"}:
         raise ValueError("Unknown backend")
-    if spec["kind"] not in {"train", "eval", "check"}:
+    if spec["kind"] not in {"train", "eval", "check", "prepare"}:
         raise ValueError("Unknown kind")
     if not isinstance(spec["timeout_seconds"], int) or spec["timeout_seconds"] < 1:
         raise ValueError("Positive timeout required")
@@ -61,12 +61,14 @@ def validate(spec):
         raise ValueError("command must be a nonempty argv list, never a shell string")
     if spec["kind"] == "check" and spec["timeout_seconds"] > 120:
         raise ValueError("CPU checks are limited to 120 seconds")
+    if spec["kind"] == "prepare" and spec["timeout_seconds"] > 1800:
+        raise ValueError("CPU preparation is limited to 1800 seconds")
     if spec["backend"] == "cpu" and spec["kind"] != "check":
         raise ValueError("CPU backend is for infrastructure checks only")
 
 
 def authorize(spec, policy, records):
-    if spec["kind"] == "check":
+    if spec["kind"] in {"check", "prepare"}:
         return
     if policy.get("approved") is not True or not policy.get("approval_note"):
         raise ValueError("Training/evaluation budget has not been approved by the user")
@@ -203,7 +205,7 @@ def worker(root, run_id):
                     (data / subdir).mkdir(parents=True, exist_ok=True)
                     env[key] = str(data / subdir)
                 env.pop("GALLIUM_DRIVER", None)
-            if spec["kind"] == "check":
+            if spec["kind"] in {"check", "prepare"}:
                 env["CUDA_VISIBLE_DEVICES"] = ""
             else:
                 query = subprocess.check_output(
