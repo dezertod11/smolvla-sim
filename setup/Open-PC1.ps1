@@ -29,6 +29,8 @@ if ($changed) {
 }
 if ($PrepareOnly) { return }
 if ($Container) {
+    try { & (Join-Path $PSScriptRoot 'Start-PC1Proxy.ps1') }
+    catch { Write-Warning ("Codex network: " + $_.Exception.Message) }
     $metadata = '{"hostPath":"/home/alexander/projects/smolvla-sim","localDocker":false,"configFile":{"$mid":1,"path":"/home/alexander/projects/smolvla-sim/.devcontainer/devcontainer.json","scheme":"vscode-fileHost"}}'
     $hex = ([BitConverter]::ToString([Text.Encoding]::UTF8.GetBytes($metadata))).Replace('-', '').ToLowerInvariant()
     $uri = 'vscode-remote://dev-container+' + $hex + '@ssh-remote+nlp-pc-2026/workspace'

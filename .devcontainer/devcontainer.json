@@ -5,6 +5,14 @@
   "workspaceFolder": "/workspace",
   "shutdownAction": "none",
   "overrideCommand": false,
+  "remoteEnv": {
+    "HTTP_PROXY": "http://host.docker.internal:18089",
+    "HTTPS_PROXY": "http://host.docker.internal:18089",
+    "http_proxy": "http://host.docker.internal:18089",
+    "https_proxy": "http://host.docker.internal:18089",
+    "NO_PROXY": "localhost,127.0.0.1,::1,host.docker.internal,dev",
+    "no_proxy": "localhost,127.0.0.1,::1,host.docker.internal,dev"
+  },
   "customizations": {
     "vscode": {
       "extensions": ["ms-python.python", "charliermarsh.ruff"],

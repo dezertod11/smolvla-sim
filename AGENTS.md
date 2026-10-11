@@ -39,6 +39,12 @@
   и переживает `down -v`; не удаляй его вручную: там настройки и история.
 - `setup/Open-PC1.cmd` открывает контейнер в отдельном профиле VS Code;
   launcher восстанавливает Docker-wrapper и исключает его из Settings Sync.
+- Сеть VS Code/Codex: `remoteEnv` задаёт HTTP(S)-прокси
+  `http://host.docker.internal:18089`. Это SSH-туннель к Happ на ноутбуке,
+  которым управляет `setup/Start-PC1Proxy.ps1`. Ноутбук/Happ нужны во время работы.
+  Не отключай TLS-проверки и не копируй auth.json для устранения сетевой ошибки.
+  В обычном `docker exec` этих переменных нет; проверки через exec должны
+  явно задавать HTTPS_PROXY. Подробности и откат: `setup/CODEX_NETWORK.md`.
 - Из WSL управляй проектом через `bash scripts/pc1.sh ...`;
   `scripts/docker.sh` проверяет выбранный движок.
 - Образ `smolvla-sim:dev` уже собран. Обычный запуск использует
