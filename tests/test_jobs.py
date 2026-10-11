@@ -54,3 +54,14 @@ def test_atomic_state_roundtrip(tmp_path):
     jobs.write(p, {"status": "succeeded"})
     assert jobs.read(p) == {"status": "succeeded"}
     assert list(tmp_path.glob("*.tmp")) == []
+
+
+def test_gpu_lease_excludes_other_owner_and_releases(tmp_path):
+    path = tmp_path / ".gpu-1.lock"
+    with jobs.lock(path, blocking=False):
+        with pytest.raises(BlockingIOError), jobs.lock(path, blocking=False):
+            pass
+        with jobs.lock(tmp_path / ".gpu-2.lock", blocking=False):
+            pass
+    with jobs.lock(path, blocking=False):
+        pass

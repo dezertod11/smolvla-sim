@@ -10,7 +10,7 @@ ALLOWED_ROOT = Path("/home/jovyan/shares/SR006.nfs2/spiridonov/malnev_world_mode
 
 
 def select_gpu(rows, mode, requested=None):
-    allowed = set(range(1 if mode == "smoke" else 2, 8))
+    allowed = set(range(1, 8))  # User authorized idle GPU 1–7 for all work, 2026-10-12.
     if requested is not None and requested not in allowed:
         raise ValueError(f"GPU {requested} is forbidden for {mode}")
     for row in rows:

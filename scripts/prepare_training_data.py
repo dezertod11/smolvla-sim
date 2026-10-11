@@ -29,7 +29,7 @@ def main():
                     digest = hashlib.file_digest(handle, "sha256").hexdigest()
                 manifest["files"][str(p.relative_to(data))] = digest
     dest = data / "datasets/libero"
-    print("Downloading LIBERO metadata and 19 selected Parquet shards", flush=True)
+    print("Downloading LIBERO metadata and audited physical Parquet shards", flush=True)
     snapshot_download(**artifacts["dataset"], repo_type="dataset", local_dir=dest,
                       allow_patterns=["meta/**", *selection["selection"]["data_files"]],
                       max_workers=4)
@@ -46,3 +46,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

@@ -1,7 +1,7 @@
 """Detached Linux experiment supervisor. No scheduler or LLM is hidden here.
 
 GPU jobs require an explicit, separately stored budget approval. Commands are
-trusted project code, not a security sandbox. One job per host, unique run IDs,
+trusted project code, not a security sandbox. Bounded concurrency, unique run IDs,
 immutable source copies, bounded runtime, cancellation without PID guessing.
 """
 
@@ -131,7 +131,11 @@ def submit(root, spec, budget):
         existing = records(root)
         if any(r["spec"]["id"] == spec["id"] for r in existing):
             raise ValueError("Run ID already exists; inspect it instead of resubmitting")
-        if any(r["status"] not in FINAL for r in existing):
+        active = [r for r in existing if r["status"] not in FINAL]
+        concurrency = 3 if spec["backend"] == "h100" else 1
+        if len(active) >= concurrency or any(
+            time.time() - r.get("heartbeat_at", r["created_at"]) > 60 for r in active
+        ):
             raise ValueError("An existing job is active or needs recovery; inspect status")
         policy = read(budget) if budget.exists() else {}
         authorize(spec, policy, existing)
@@ -188,7 +192,9 @@ def worker(root, run_id):
 
     signal.signal(signal.SIGTERM, interrupt)
     signal.signal(signal.SIGINT, interrupt)
-    with lock(root / ".execution.lock", blocking=False):
+    execution_root = run if spec["backend"] == "h100" else root
+    execution_lock = execution_root / ".execution.lock"
+    with lock(execution_lock, blocking=False), contextlib.ExitStack() as leases:
         try:
             data, python = locations(spec["backend"])
             if spec["kind"] != "check" and shutil.disk_usage(data).free < 20 * 1024**3:
@@ -214,7 +220,20 @@ def worker(root, run_id):
                 )
                 rows = list(csv.reader(query.splitlines()))
                 if spec["backend"] == "h100":
-                    gpu = select_gpu(rows, "train" if spec["kind"] == "train" else "smoke")
+                    gpu = None
+                    # Hold a per-GPU lease until the child exits, including model-loading time.
+                    with lock(root / ".gpu-allocation.lock"):
+                        for row in rows:
+                            try:
+                                candidate = select_gpu([row], "train")
+                                lease = lock(root / f".gpu-{candidate}.lock", blocking=False)
+                                leases.enter_context(lease)
+                            except (RuntimeError, BlockingIOError):
+                                continue
+                            gpu = candidate
+                            break
+                    if gpu is None:
+                        raise RuntimeError("No idle unleased H100 GPU available")
                 else:
                     gpu, used, total, util = map(int, rows[0])
                     if used >= 1024 or total - used < 12000 or util >= 10:

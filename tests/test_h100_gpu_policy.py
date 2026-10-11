@@ -15,11 +15,15 @@ def test_gpu_zero_is_never_selected():
         module.select_gpu([[0, 0, 80000, 0]], "smoke", 0)
 
 
-def test_training_skips_gpu_one_and_busy_cards():
+def test_training_accepts_gpu_one():
     assert module.select_gpu(
         [[0, 0, 80000, 0], [1, 0, 80000, 0], [2, 3000, 80000, 90], [3, 0, 80000, 0]],
         "train",
-    ) == 3
+    ) == 1
+
+
+def test_training_skips_busy_cards():
+    assert module.select_gpu([[1, 3000, 80000, 90], [3, 0, 80000, 0]], "train") == 3
 
 
 def test_busy_gpu_is_rejected_even_when_explicitly_requested():
