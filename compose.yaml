@@ -25,3 +25,12 @@ services:
     volumes:
       - .:/workspace
       - ${ROBOTICS_DATA_DIR:?Set ROBOTICS_DATA_DIR in .env}:/data
+      # Linux filesystem for VS Code, Codex state and Unix sockets.
+      # Keep HOME's path stable; the old Windows folder stays as a backup.
+      - dev-home:/data/home
+
+volumes:
+  dev-home:
+    name: smolvla-sim-home
+    # Managed separately so `compose down -v` cannot erase editor/user state.
+    external: true

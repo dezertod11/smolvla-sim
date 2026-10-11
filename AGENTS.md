@@ -32,6 +32,13 @@
   `containerd.service` отключён. Не включай второй движок.
 - Диск Docker: `D:\DockerDesktopWSL\disk\docker_data.vhdx`; Ubuntu WSL остаётся
   на C:. Код хранится в Linux-файловой системе WSL.
+- HOME сохраняет путь `/data/home`, но смонтирован из Linux-тома `smolvla-sim-home`.
+  VS Code Server и состояние Codex должны оставаться на Linux filesystem:
+  Windows bind mount не поддерживает нужные Unix-сокеты. Старый `/data/home`
+  на Windows сохранён как резервная копия и перекрыт томом. Том объявлен external
+  и переживает `down -v`; не удаляй его вручную: там настройки и история.
+- `setup/Open-PC1.cmd` открывает контейнер в отдельном профиле VS Code;
+  launcher восстанавливает Docker-wrapper и исключает его из Settings Sync.
 - Из WSL управляй проектом через `bash scripts/pc1.sh ...`;
   `scripts/docker.sh` проверяет выбранный движок.
 - Образ `smolvla-sim:dev` уже собран. Обычный запуск использует
