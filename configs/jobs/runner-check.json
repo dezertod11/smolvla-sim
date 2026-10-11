@@ -1,0 +1,7 @@
+{
+  "id": "runner-check-001",
+  "backend": "cpu",
+  "kind": "check",
+  "timeout_seconds": 15,
+  "command": ["{python}", "-c", "import time; print('runner started', flush=True); time.sleep(3); print('runner completed', flush=True)"]
+}

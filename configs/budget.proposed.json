@@ -1,0 +1,14 @@
+{
+  "approved": false,
+  "approval_note": "",
+  "limits": {
+    "h100": {
+      "train": {"max_runs": 5, "max_seconds": 30600, "max_run_seconds": 14400},
+      "eval": {"max_runs": 16, "max_seconds": 43200, "max_run_seconds": 10800}
+    },
+    "pc1": {
+      "train": {"max_runs": 0, "max_seconds": 0, "max_run_seconds": 0},
+      "eval": {"max_runs": 8, "max_seconds": 7200, "max_run_seconds": 1800}
+    }
+  }
+}

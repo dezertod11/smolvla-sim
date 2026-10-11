@@ -1,0 +1,7 @@
+{
+  "id": "h100-train-smoke-001",
+  "backend": "h100",
+  "kind": "train",
+  "timeout_seconds": 600,
+  "command": ["{python}", "scripts/train_managed.py", "--data", "{data}", "--output", "{output}", "--steps", "50", "--batch-size", "16"]
+}
