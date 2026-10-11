@@ -45,6 +45,7 @@ needed = [r for r in results if any(
     g.get("episode_index") is None or any(g["episode_index"][0] <= x <= g["episode_index"][1]
                                          for x in selected) for g in r["groups"])]
 out = Path(os.environ["ROBOTICS_DATA_DIR"]) / "dataset_layout_audit.json"
-out.write_text(json.dumps({"artifact": artifact, "files": results, "selected_files": needed}, indent=2))
+report = {"artifact": artifact, "files": results, "selected_files": needed}
+out.write_text(json.dumps(report, indent=2))
 print("Selected physical files", len(needed), "bytes", sum(r["bytes"] for r in needed),
       "total physical rows", sum(r["rows"] for r in results), "report", out, flush=True)
