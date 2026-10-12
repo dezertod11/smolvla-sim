@@ -2,7 +2,7 @@
   "id": "h100-eval-final-own-int8-n10-001",
   "backend": "h100",
   "kind": "eval",
-  "timeout_seconds": 6000,
+  "timeout_seconds": 5400,
   "command": [
     "{python}", "scripts/eval_managed.py",
     "--checkpoint", "{data}/jobs/h100-train-main-001/output/checkpoints/030000/pretrained_model",
