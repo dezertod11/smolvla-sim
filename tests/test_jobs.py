@@ -26,10 +26,12 @@ def test_unapproved_training_is_denied():
         jobs.authorize(job(), {}, [])
 
 
-def test_failed_runs_still_consume_reservation():
-    previous = [{"spec": job(timeout_seconds=15), "status": "failed"}]
+def test_finished_runs_charge_measured_time_but_active_runs_reserve_timeout():
+    finished = [{"spec": job(timeout_seconds=15), "status": "failed", "elapsed_seconds": 2}]
+    jobs.authorize(job(), policy(), finished)
+    active = [{"spec": job(timeout_seconds=15), "status": "running", "elapsed_seconds": 2}]
     with pytest.raises(ValueError, match="Time budget"):
-        jobs.authorize(job(), policy(), previous)
+        jobs.authorize(job(), policy(), active)
 
 
 def test_count_and_per_run_limits():

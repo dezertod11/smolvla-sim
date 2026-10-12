@@ -8,6 +8,17 @@ from pathlib import Path
 import torch
 
 
+def checkpoint_rename_map(checkpoint):
+    config = json.loads((Path(checkpoint) / "config.json").read_text())
+    features = config.get("input_features", {})
+    if "observation.images.camera1" not in features:
+        return {}
+    return {
+        "observation.images.image": "observation.images.camera1",
+        "observation.images.image2": "observation.images.camera2",
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--checkpoint", required=True)
@@ -22,6 +33,7 @@ def main():
     episodes = 1 if args.development else protocol["episodes_per_task"]
     seed = protocol["development_start_seed"] if args.development else protocol["final_start_seed"]
     task_ids = protocol["task_ids"]
+    rename_map = checkpoint_rename_map(args.checkpoint)
     if args.output.exists():
         raise SystemExit(f"Refusing to overwrite evaluation output: {args.output}")
 
@@ -61,6 +73,8 @@ def main():
         f"--seed={seed}",
         f"--output_dir={args.output}",
     ]
+    if rename_map:
+        sys.argv.append(f"--rename_map={json.dumps(rename_map)}")
     evaluation.eval_main()
     evidence = {
         "checkpoint": args.checkpoint,
@@ -71,6 +85,7 @@ def main():
         "episodes_per_task": episodes,
         "seed": seed,
         "quantization": quantization_report,
+        "rename_map": rename_map,
     }
     (args.output / "protocol.json").write_text(json.dumps(evidence, indent=2) + "\n")
 

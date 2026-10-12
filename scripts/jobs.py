@@ -75,8 +75,14 @@ def authorize(spec, policy, records):
     bucket = policy["limits"][spec["backend"]][spec["kind"]]
     prior = [r for r in records if r["spec"]["kind"] == spec["kind"]
              and r["spec"]["backend"] == spec["backend"]]
-    # Reserve the full timeout, even for failed runs: deliberately conservative.
-    reserved = sum(r["spec"]["timeout_seconds"] for r in prior)
+    # Active work reserves its full timeout. Completed work is charged by measured
+    # wall time, which preserves the approved GPU-hour ceiling without letting a
+    # fast pre-flight failure consume hours that were never used.
+    reserved = sum(
+        r.get("elapsed_seconds", r["spec"]["timeout_seconds"])
+        if r["status"] in FINAL else r["spec"]["timeout_seconds"]
+        for r in prior
+    )
     if len(prior) >= bucket["max_runs"]:
         raise ValueError("Run-count budget exhausted")
     if reserved + spec["timeout_seconds"] > bucket["max_seconds"]:

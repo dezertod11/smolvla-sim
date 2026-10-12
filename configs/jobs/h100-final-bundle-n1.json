@@ -1,0 +1,12 @@
+{
+  "id": "h100-final-bundle-n1-001",
+  "backend": "h100",
+  "kind": "eval",
+  "timeout_seconds": 10800,
+  "command": [
+    "{python}", "scripts/run_final_bundle.py",
+    "--checkpoint", "{data}/runs/h100-train-main-001/output/checkpoints/030000/pretrained_model",
+    "--data", "{data}", "--output", "{output}",
+    "--action", "eval-bf16-n1", "--action", "bench-bf16-cpu"
+  ]
+}
