@@ -12,7 +12,7 @@ import sys
 from pathlib import Path
 
 
-def prepare(config, data, output, steps, batch_size, episodes_limit=None):
+def prepare(config, data, output, steps, batch_size, episodes_limit=None, num_workers=4):
     config = json.loads(json.dumps(config))
     config["dataset"]["root"] = str(data / "datasets/libero_object")
     config["policy"]["pretrained_path"] = str(data / "models/base")
@@ -26,7 +26,7 @@ def prepare(config, data, output, steps, batch_size, episodes_limit=None):
         config["dataset"]["episodes"] = config["dataset"]["episodes"][:episodes_limit]
     config["log_freq"] = min(50, steps)
     config["save_freq"] = min(1000, steps)
-    config["num_workers"] = 4
+    config["num_workers"] = num_workers
     config["job_name"] = output.parent.name
     config["resume"] = False
     config["policy"]["push_to_hub"] = False
@@ -43,6 +43,7 @@ def main():
     parser.add_argument("--steps", type=int, required=True)
     parser.add_argument("--batch-size", type=int, required=True)
     parser.add_argument("--episodes-limit", type=int)
+    parser.add_argument("--num-workers", type=int, default=4)
     parser.add_argument("--validate-only", action="store_true")
     args = parser.parse_args()
     if args.steps < 1 or args.batch_size < 1:
@@ -54,6 +55,7 @@ def main():
         args.steps,
         args.batch_size,
         args.episodes_limit,
+        args.num_workers,
     )
     # The policy module registers the dataclass with draccus.
     import draccus

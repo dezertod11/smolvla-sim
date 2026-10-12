@@ -3,5 +3,5 @@
   "backend": "h100",
   "kind": "train",
   "timeout_seconds": 14400,
-  "command": ["{python}", "scripts/train_managed.py", "--data", "{data}", "--output", "{output}", "--steps", "30000", "--batch-size", "16"]
+  "command": ["{python}", "scripts/train_managed.py", "--data", "{data}", "--output", "{output}", "--steps", "30000", "--batch-size", "16", "--num-workers", "12"]
 }
