@@ -1,15 +1,11 @@
-import json
-
-from scripts.eval_managed import checkpoint_rename_map
 from scripts.run_final_bundle import command
+from smolvla_service.features import camera_rename_map
 
 
-def test_own_checkpoint_gets_environment_camera_rename(tmp_path):
-    (tmp_path / "config.json").write_text(json.dumps({
-        "input_features": {"observation.images.camera1": {},
-                           "observation.images.camera2": {}},
-    }))
-    assert checkpoint_rename_map(tmp_path) == {
+def test_own_checkpoint_gets_environment_camera_rename():
+    assert camera_rename_map({
+        "observation.images.camera1": {}, "observation.images.camera2": {}
+    }) == {
         "observation.images.image": "observation.images.camera1",
         "observation.images.image2": "observation.images.camera2",
     }

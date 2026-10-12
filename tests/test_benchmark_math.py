@@ -1,9 +1,4 @@
-import sys
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).parents[1] / "scripts"))
-
-from benchmark_policy import percentile
+from smolvla_service.metrics import percentile
 
 
 def test_percentile_interpolates_sorted_samples():

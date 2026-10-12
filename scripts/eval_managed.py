@@ -7,16 +7,12 @@ from pathlib import Path
 
 import torch
 
+from smolvla_service.features import camera_rename_map
+
 
 def checkpoint_rename_map(checkpoint):
     config = json.loads((Path(checkpoint) / "config.json").read_text())
-    features = config.get("input_features", {})
-    if "observation.images.camera1" not in features:
-        return {}
-    return {
-        "observation.images.image": "observation.images.camera1",
-        "observation.images.image2": "observation.images.camera2",
-    }
+    return camera_rename_map(config.get("input_features", {}))
 
 
 def main():

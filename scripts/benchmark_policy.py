@@ -16,15 +16,9 @@ from lerobot.policies.smolvla.configuration_smolvla import SmolVLAConfig  # noqa
 from torch.utils.data import DataLoader
 from train_managed import prepare
 
+from smolvla_service.features import camera_rename_map
+from smolvla_service.metrics import percentile
 from smolvla_service.quantization import quantize_linear_int8
-
-
-def percentile(values, quantile):
-    ordered = sorted(values)
-    index = (len(ordered) - 1) * quantile
-    lower = int(index)
-    upper = min(lower + 1, len(ordered) - 1)
-    return ordered[lower] + (ordered[upper] - ordered[lower]) * (index - lower)
 
 
 def main():
@@ -51,8 +45,7 @@ def main():
     policy_cfg.pretrained_path = str(args.checkpoint.resolve())
     policy_cfg.vlm_model_name = str(args.data / "models/vlm")
     policy_cfg.device = args.device
-    expects_adapted_cameras = "observation.images.camera1" in policy_cfg.input_features
-    rename_map = cfg.rename_map if expects_adapted_cameras else {}
+    rename_map = camera_rename_map(policy_cfg.input_features)
     policy = make_policy(
         policy_cfg, ds_meta=dataset.meta, rename_map=rename_map
     ).eval()

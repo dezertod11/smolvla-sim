@@ -18,6 +18,7 @@ from std_msgs.msg import Float32MultiArray
 
 from smolvla_service.async_inference import AsyncInference
 from smolvla_service.conversion import action_to_list
+from smolvla_service.features import camera_rename_map
 
 
 def decode_image(message):
@@ -37,14 +38,7 @@ class PolicyRunner:
         config.pretrained_path = checkpoint
         config.vlm_model_name = vlm_model
         env_config = LiberoEnvConfig(task="libero_object", task_ids=[0])
-        rename_map = (
-            {
-                "observation.images.image": "observation.images.camera1",
-                "observation.images.image2": "observation.images.camera2",
-            }
-            if "observation.images.camera1" in config.input_features
-            else {}
-        )
+        rename_map = camera_rename_map(config.input_features)
         self.policy = make_policy(
             config, env_cfg=env_config, rename_map=rename_map
         ).eval()

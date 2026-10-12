@@ -6,9 +6,10 @@ H100 предназначен прежде всего для обучения.
 
 Реализованы воспроизводимое обучение и оценка на H100, BF16/INT8 benchmarks,
 два ROS2-узла с неблокирующим инференсом и Compose runtime для замкнутого
-эпизода LIBERO. Эталонный checkpoint уже проверен на 100 эпизодах: 87% success.
-Сырые результаты хранятся в `artifacts/results`, актуальный ход финальной
-матрицы — в [`docs/STATUS.md`](docs/STATUS.md).
+эпизода LIBERO. Собственная BF16-модель получила 97/100 success против 87/100
+у готового checkpoint; ROS2 closed loop на RTX 5070 Ti завершился успешно.
+Сырые результаты хранятся в `artifacts/results`. Публичный репозиторий:
+[github.com/dezertod11/smolvla-sim](https://github.com/dezertod11/smolvla-sim).
 
 ## Документы и начало работы с Codex
 
