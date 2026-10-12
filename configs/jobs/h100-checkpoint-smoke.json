@@ -1,0 +1,11 @@
+{
+  "id": "h100-checkpoint-smoke-001",
+  "backend": "h100",
+  "kind": "eval",
+  "timeout_seconds": 900,
+  "command": [
+    "{python}", "scripts/check_checkpoint.py",
+    "--checkpoint", "{data}/runs/h100-train-smoke-003/output/checkpoints/000050/pretrained_model",
+    "--data", "{data}"
+  ]
+}
