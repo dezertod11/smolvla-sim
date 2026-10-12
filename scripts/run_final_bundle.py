@@ -5,7 +5,6 @@ import subprocess
 import sys
 from pathlib import Path
 
-
 ACTIONS = {
     "eval-bf16-n1": ("eval", "bf16", "1"),
     "eval-bf16-n10": ("eval", "bf16", "10"),
