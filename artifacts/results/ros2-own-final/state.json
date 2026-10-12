@@ -1,0 +1,24 @@
+{
+  "spec": {
+    "id": "pc1-ros2-own-final-002",
+    "backend": "pc1",
+    "kind": "eval",
+    "timeout_seconds": 900,
+    "command": [
+      "bash",
+      "scripts/run_ros2_episode.sh",
+      "{project}/ros2_ws/src/vla_bridge/config/libero_object_own_final.yaml"
+    ]
+  },
+  "status": "succeeded",
+  "created_at": 1791783948.553771,
+  "git_commit": "ce053c9012169768172b59f40a1f106b31feb451",
+  "physical_gpu": 0,
+  "started_at": 1791783950.5769515,
+  "supervisor_pid": 86769,
+  "child_pid": 86772,
+  "heartbeat_at": 1791784086.790859,
+  "elapsed_seconds": 127.55928413599031,
+  "exit_code": 0,
+  "finished_at": 1791784087.7950628
+}

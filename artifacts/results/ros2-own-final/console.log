@@ -1,0 +1,53 @@
+Starting >>> vla_bridge
+Finished <<< vla_bridge [4.15s]
+
+Summary: 1 package finished [4.68s]
+[INFO] [launch]: All log files can be found below /data/home/.ros/log/2026-10-12-05-45-56-930580-c40c2b1004a3-86821
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [sim_node-1]: process started with pid [86825]
+[INFO] [smolvla_node-2]: process started with pid [86826]
+[sim_node-1] /opt/venv/lib/python3.12/site-packages/robosuite/__init__.py:30: SyntaxWarning: invalid escape sequence '\ '
+[sim_node-1]   __logo__ = """
+[sim_node-1] [robosuite WARNING] No private macro file found! (__init__.py:7)
+[sim_node-1] WARNING:robosuite_logs:No private macro file found!
+[sim_node-1] [robosuite WARNING] It is recommended to use a private macro file (__init__.py:8)
+[sim_node-1] WARNING:robosuite_logs:It is recommended to use a private macro file
+[sim_node-1] [robosuite WARNING] To setup, run: python /opt/venv/lib/python3.12/site-packages/robosuite/scripts/setup_macros.py (__init__.py:9)
+[sim_node-1] WARNING:robosuite_logs:To setup, run: python /opt/venv/lib/python3.12/site-packages/robosuite/scripts/setup_macros.py
+[sim_node-1] [info] using task orders [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+[sim_node-1] Local assets not found. Downloading from HuggingFace Hub...
+[sim_node-1] Assets already downloaded at /data/home/.cache/libero/assets
+[sim_node-1] libEGL warning: egl: failed to create dri2 screen
+[sim_node-1] libEGL warning: NEEDS EXTENSION: falling back to kms_swrast
+[smolvla_node-2] Loading  /data/models/vlm weights ...
+[smolvla_node-2] `torch_dtype` is deprecated! Use `dtype` instead!
+[smolvla_node-2] Reducing the number of VLM layers to 16 ...
+[smolvla_node-2] Loading weights from local directory
+[smolvla_node-2] [WARN] [1791784064.570041795] [smolvla]: Waiting for fresh camera and robot-state messages
+[smolvla_node-2] [WARN] [1791784069.501151636] [smolvla]: Waiting for fresh camera and robot-state messages
+[smolvla_node-2] [WARN] [1791784074.501343976] [smolvla]: Waiting for fresh camera and robot-state messages
+[smolvla_node-2] [WARN] [1791784079.502944026] [smolvla]: Waiting for fresh camera and robot-state messages
+[sim_node-1] [INFO] [1791784082.053186267] [libero_sim]: ROS2_EPISODE_RESULT success=True actions=149
+[smolvla_node-2] [WARN] [1791784084.501321888] [smolvla]: Waiting for fresh camera and robot-state messages
+[INFO] [sim_node-1]: process has finished cleanly [pid 86825]
+[INFO] [smolvla_node-2]: sending signal 'SIGINT' to process[smolvla_node-2]
+[smolvla_node-2] Traceback (most recent call last):
+[smolvla_node-2]   File "/data/runs/pc1-ros2-own-final-002/source/ros2_ws/install/vla_bridge/lib/vla_bridge/smolvla_node", line 33, in <module>
+[smolvla_node-2]     sys.exit(load_entry_point('vla-bridge', 'console_scripts', 'smolvla_node')())
+[smolvla_node-2]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[smolvla_node-2]   File "/data/runs/pc1-ros2-own-final-002/source/ros2_ws/build/vla_bridge/vla_bridge/smolvla_node.py", line 158, in main
+[smolvla_node-2]     rclpy.spin(node)
+[smolvla_node-2]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/__init__.py", line 247, in spin
+[smolvla_node-2]     executor.spin_once()
+[smolvla_node-2]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 926, in spin_once
+[smolvla_node-2]     self._spin_once_impl(timeout_sec)
+[smolvla_node-2]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 907, in _spin_once_impl
+[smolvla_node-2]     handler, entity, node = self.wait_for_ready_callbacks(
+[smolvla_node-2]                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[smolvla_node-2]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 877, in wait_for_ready_callbacks
+[smolvla_node-2]     return next(self._cb_iter)
+[smolvla_node-2]            ^^^^^^^^^^^^^^^^^^^
+[smolvla_node-2]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 781, in _wait_for_ready_callbacks
+[smolvla_node-2]     wait_set.wait(timeout_nsec)
+[smolvla_node-2] KeyboardInterrupt
+[ERROR] [smolvla_node-2]: process has died [pid 86826, exit code -2, cmd '/data/runs/pc1-ros2-own-final-002/source/ros2_ws/install/vla_bridge/lib/vla_bridge/smolvla_node --ros-args --params-file /data/runs/pc1-ros2-own-final-002/source/ros2_ws/src/vla_bridge/config/libero_object_own_final.yaml'].

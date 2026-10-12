@@ -1,0 +1,5 @@
+[
+  "bash",
+  "scripts/run_ros2_episode.sh",
+  "/data/runs/pc1-ros2-own-final-002/source/ros2_ws/src/vla_bridge/config/libero_object_own_final.yaml"
+]
