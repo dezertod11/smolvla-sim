@@ -12,7 +12,7 @@ import sys
 from pathlib import Path
 
 
-def prepare(config, data, output, steps, batch_size):
+def prepare(config, data, output, steps, batch_size, episodes_limit=None):
     config = json.loads(json.dumps(config))
     config["dataset"]["root"] = str(data / "datasets/libero_object")
     config["policy"]["pretrained_path"] = str(data / "models/base")
@@ -20,6 +20,10 @@ def prepare(config, data, output, steps, batch_size):
     config["output_dir"] = str(output)
     config["steps"] = steps
     config["batch_size"] = batch_size
+    if episodes_limit is not None:
+        if episodes_limit < 1:
+            raise ValueError("episodes_limit must be positive")
+        config["dataset"]["episodes"] = config["dataset"]["episodes"][:episodes_limit]
     config["log_freq"] = min(50, steps)
     config["save_freq"] = min(1000, steps)
     config["num_workers"] = 4
@@ -38,12 +42,19 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--steps", type=int, required=True)
     parser.add_argument("--batch-size", type=int, required=True)
+    parser.add_argument("--episodes-limit", type=int)
     parser.add_argument("--validate-only", action="store_true")
     args = parser.parse_args()
     if args.steps < 1 or args.batch_size < 1:
         parser.error("steps and batch size must be positive")
-    cfg = prepare(json.loads(args.config.read_text()), args.data.resolve(),
-                  args.output.resolve(), args.steps, args.batch_size)
+    cfg = prepare(
+        json.loads(args.config.read_text()),
+        args.data.resolve(),
+        args.output.resolve(),
+        args.steps,
+        args.batch_size,
+        args.episodes_limit,
+    )
     # The policy module registers the dataclass with draccus.
     import draccus
     from lerobot.configs.train import TrainPipelineConfig

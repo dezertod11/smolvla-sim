@@ -205,11 +205,15 @@ def worker(root, run_id):
                        ACCELERATE_MIXED_PRECISION="bf16", MUJOCO_GL="egl")
             if spec["backend"] == "h100":
                 for key, subdir in {"HOME": "home", "HF_HOME": "huggingface",
-                                    "XDG_CACHE_HOME": "cache", "TMPDIR": "tmp",
+                                    "XDG_CACHE_HOME": "cache",
                                     "NUMBA_CACHE_DIR": "cache/numba",
                                     "LIBERO_CONFIG_PATH": "libero-config"}.items():
                     (data / subdir).mkdir(parents=True, exist_ok=True)
                     env[key] = str(data / subdir)
+                # multiprocessing AF_UNIX sockets must stay below Linux's 108-byte limit.
+                short_tmp = PROJECT / "t"
+                short_tmp.mkdir(exist_ok=True)
+                env["TMPDIR"] = str(short_tmp)
                 env.pop("GALLIUM_DRIVER", None)
             if spec["kind"] in {"check", "prepare"}:
                 env["CUDA_VISIBLE_DEVICES"] = ""
