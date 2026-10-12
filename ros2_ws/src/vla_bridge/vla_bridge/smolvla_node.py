@@ -41,12 +41,8 @@ class PolicyRunner:
         self.env_pre, self.env_post = make_env_pre_post_processors(env_config, config)
         overrides = {
             "device_processor": {"device": device},
-            "rename_observations_processor": {
-                "rename_map": {
-                    "observation.images.image": "observation.images.camera1",
-                    "observation.images.image2": "observation.images.camera2",
-                }
-            },
+            "rename_observations_processor": {"rename_map": {}},
+            "tokenizer_processor": {"tokenizer_name": vlm_model},
         }
         self.pre, self.post = make_pre_post_processors(
             config, pretrained_path=checkpoint, preprocessor_overrides=overrides
