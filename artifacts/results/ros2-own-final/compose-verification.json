@@ -1,12 +1,13 @@
 {
   "command": "bash scripts/pc1.sh up runtime",
-  "source_commit": "f2a1712",
-  "recorded_at": "2026-10-12T07:17:00Z",
+  "source_commit": "f284e40",
+  "recorded_at": "2026-10-12T07:39:00Z",
   "compose_exit_code": 0,
   "episode_success": true,
-  "actions": 146,
-  "video_duration_seconds": 117,
-  "video_sha256": "43e2339bbe436cef72d982aaa1c627a5c6758c37fb60b1c8cc977cdc1a71d156",
+  "actions": 159,
+  "video_duration_seconds": 114,
+  "playback_speed": 5.0,
+  "video_sha256": "374245b81c98a58079c30481854775c20e1c4eb3c59fff13b8415323180f0d41",
   "transcript": "compose-runtime.typescript",
   "timing": "compose-runtime.timing"
 }

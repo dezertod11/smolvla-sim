@@ -490,9 +490,9 @@ CPU-тесты загрузки YAML и преобразования дейст�
 
 Точная команда из README `bash scripts/pc1.sh up runtime` проверена на RTX 5070 Ti.
 Compose создал `sim_node` и `smolvla_node`, замкнутый эпизод завершился
-`success=True` после 146 действий, runtime container вышел с кодом 0. Полный
+`success=True` после 159 действий, runtime container вышел с кодом 0. Полный
 terminal transcript и timing находятся в `artifacts/results/ros2-own-final`,
-117-секундная запись — `artifacts/videos/docker-compose-up.mp4`; её SHA256 и
+114-секундная ускоренная запись — `artifacts/videos/docker-compose-up.mp4`; её SHA256 и
 метаданные — `compose-verification.json`.
 
 Добавлены четыре команды чистой установки: clone, bootstrap образа/volume,

@@ -280,14 +280,14 @@ Orin; текущую INT8-схему использовать нельзя бе�
 - [готовая модель, успешный эпизод](artifacts/videos/reference-bf16-n10-success-task0-episode0.mp4);
 - [собственная BF16 n=10, успешный эпизод](artifacts/videos/own-bf16-n10-success-task0-episode0.mp4);
 - [собственная BF16 n=10, неудачный эпизод](artifacts/videos/own-bf16-n10-failure-task2-episode7.mp4);
-- [полный запуск `docker compose up`, 1 мин 57 с](artifacts/videos/docker-compose-up.mp4).
+- [полный запуск `docker compose up`, ускоренная запись 1 мин 54 с](artifacts/videos/docker-compose-up.mp4).
 
 Финальный ROS2 closed loop выполнен на RTX 5070 Ti: два узла обменивались двумя
 изображениями, состоянием и семимерным действием, после 149 действий симулятор
 записал `ROS2_EPISODE_RESULT success=True`. Состояние managed job и полный лог
 сохранены в [`artifacts/results/ros2-own-final`](artifacts/results/ros2-own-final).
 Там же находятся исходный terminal transcript, timing и SHA256 видеозаписи;
-Compose runtime завершился с кодом 0 и результатом `success=True`, 146 действий.
+Compose runtime завершился с кодом 0 и результатом `success=True`, 159 действий.
 
 Для итогового запуска на ПК-1 checkpoint должен находиться в
 `/data/models/own-final`. Его можно получить проверяемой командой
