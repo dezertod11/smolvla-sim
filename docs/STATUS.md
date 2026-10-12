@@ -19,8 +19,10 @@ Checkpoint перенесён на ПК-1. Первый ROS2-прогон выя
 preprocessor. Corrective managed job затем успешно выполнил реальный closed loop
 на RTX 5070 Ti: `success=True`, 149 действий, 127.6 с wall time. Сырые JSON,
 агрегированная матрица, benchmark reports, четыре MP4 и ROS2 console/state лежат
-в `artifacts`. CPU-тесты: 43 passed; Ruff проходит. Осталось завершить README,
-опубликовать GitHub-репозиторий и подтвердить реальный GitHub Actions run.
+в `artifacts`. CPU-тесты: 43 passed; Ruff проходит. Публичный репозиторий
+`dezertod11/smolvla-sim` создан, реальный GitHub Actions CPU checks завершился
+успешно. Обязательные критерии задания выполнены; остаётся финальный аудит
+артефактов и остановка автономного расписания.
 
 ## Последняя проверка исполнения — 12 октября 2026, 07:15 MSK
 

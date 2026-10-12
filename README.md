@@ -1,5 +1,7 @@
 # SmolVLA в LIBERO и ROS2
 
+[![CPU checks](https://github.com/dezertod11/smolvla-sim/actions/workflows/ci.yml/badge.svg)](https://github.com/dezertod11/smolvla-sim/actions/workflows/ci.yml)
+
 Рабочий проект для тестового задания SmolVLA + LeRobot + ROS2.
 Ноутбук используется для VS Code. На ПК-1 работают Docker, LIBERO и ROS2;
 H100 предназначен прежде всего для обучения.
@@ -172,8 +174,8 @@ GPU 0 запрещена. Управляемые задания выбирают
 ## Разработка
 
 Исходный код: `src/smolvla_service`; ROS2-пакет: `ros2_ws/src/vla_bridge`.
-CPU-проверки: `pytest -q` и `ruff check .`. Workflow GitHub Actions подготовлен,
-но сам факт наличия файла не означает, что удалённый CI уже запускался.
+CPU-проверки: `pytest -q` и `ruff check .`. GitHub Actions реально выполнен на
+публичном репозитории: [успешный CPU checks run](https://github.com/dezertod11/smolvla-sim/actions/runs/38211994098).
 
 На ноутбуке код лежит в `C:\Users\malne\Projects\smolvla-sim`, вне OneDrive.
 После коммита `setup/Sync-PC1.ps1` отправляет изменения на ПК-1;
