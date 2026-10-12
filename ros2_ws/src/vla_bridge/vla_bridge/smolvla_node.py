@@ -37,11 +37,21 @@ class PolicyRunner:
         config.pretrained_path = checkpoint
         config.vlm_model_name = vlm_model
         env_config = LiberoEnvConfig(task="libero_object", task_ids=[0])
-        self.policy = make_policy(config, env_cfg=env_config).eval()
+        rename_map = (
+            {
+                "observation.images.image": "observation.images.camera1",
+                "observation.images.image2": "observation.images.camera2",
+            }
+            if "observation.images.camera1" in config.input_features
+            else {}
+        )
+        self.policy = make_policy(
+            config, env_cfg=env_config, rename_map=rename_map
+        ).eval()
         self.env_pre, self.env_post = make_env_pre_post_processors(env_config, config)
         overrides = {
             "device_processor": {"device": device},
-            "rename_observations_processor": {"rename_map": {}},
+            "rename_observations_processor": {"rename_map": rename_map},
             "tokenizer_processor": {"tokenizer_name": vlm_model},
         }
         self.pre, self.post = make_pre_post_processors(
