@@ -1,3 +1,21 @@
+## Последняя проверка исполнения — 12 октября 2026, 04:56 MSK
+
+H100: main training дошёл примерно до 10000/30000, loss 0.066, grad norm 0.380;
+final reference evaluation 100 эпизодов продолжает работать на GPU 2. Оба
+heartbeat свежие. Development reference перед этим дал 10/10 success.
+
+На ПК-1 реальный ROS2 launch выявил и позволил исправить четыре интеграционных
+несоответствия: загрузка config через базовый LeRobot factory, batch dimension
+single-env robot_state, закреплённый локальный VLM/tokenizer и имена image features
+checkpoint. VLM 1.9 ГБ перенесён с H100 на D: без сети HF. Последний reference
+smoke дошёл до загруженной модели и готовых входов, но остановлен после обнаружения
+deadlock первого сообщения: sim публиковал observation до регистрации subscriber.
+Теперь sim переиздаёт текущее observation с 10 Гц до получения action; ROS package
+собирается, межпроцессный transport smoke и 39 CPU-тестов проходят. Повторные
+reference jobs не запускать: лимит количества PC1-проб сохраняется для одного
+итогового запуска собственной модели после переноса checkpoint 030000. Его spec
+и YAML готовы; scripts/fetch_h100_artifact.sh выполняет фиксированный перенос.
+
 ## Последняя проверка исполнения — 12 октября 2026, 04:22 MSK
 
 Основное обучение h100-train-main-001 продолжает работать на GPU 1: шаг 4450
