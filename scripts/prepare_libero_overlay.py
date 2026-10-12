@@ -61,7 +61,9 @@ def main():
     metadata = pq.read_table(episode_file)
     rows = metadata.to_pylist()
     task_rows = pq.read_table(source / "meta/tasks.parquet").to_pylist()
-    task_names = {row["task_index"]: row["task"] for row in task_rows}
+    task_names = {
+        row["task_index"]: row.get("task", row["__index_level_0__"]) for row in task_rows
+    }
     verified_frames = 0
     for row in rows:
         episode = row["episode_index"]
