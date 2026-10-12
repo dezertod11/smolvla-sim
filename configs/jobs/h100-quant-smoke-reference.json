@@ -1,0 +1,16 @@
+{
+  "id": "h100-quant-smoke-reference-001",
+  "backend": "h100",
+  "kind": "eval",
+  "timeout_seconds": 600,
+  "command": [
+    "{python}", "scripts/benchmark_policy.py",
+    "--checkpoint", "{data}/models/reference",
+    "--data", "{data}",
+    "--output", "{output}",
+    "--device", "cuda",
+    "--precision", "int8",
+    "--warmup", "1",
+    "--iterations", "2"
+  ]
+}
