@@ -1,7 +1,7 @@
+from dataclasses import dataclass
+
 import numpy as np
 import pytest
-
-from dataclasses import dataclass
 
 from smolvla_service.conversion import action_to_list, action_to_message, image_to_chw
 

@@ -5,7 +5,6 @@ import yaml
 
 from smolvla_service.ros_config import load_policy_parameters
 
-
 ROOT = Path(__file__).parents[1]
 
 
