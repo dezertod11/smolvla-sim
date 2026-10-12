@@ -1,49 +1,26 @@
-# SmolVLA в LIBERO и ROS2
+# SmolVLA + LeRobot + ROS2 в LIBERO
 
 [![CPU checks](https://github.com/dezertod11/smolvla-sim/actions/workflows/ci.yml/badge.svg)](https://github.com/dezertod11/smolvla-sim/actions/workflows/ci.yml)
 
-Рабочий проект для тестового задания SmolVLA + LeRobot + ROS2.
-Ноутбук используется для VS Code. На ПК-1 работают Docker, LIBERO и ROS2;
-H100 предназначен прежде всего для обучения.
+Проект реализует полный цикл тестового задания: дообучение SmolVLA на
+`libero_object`, сравнение с готовой моделью, исследование `n_action_steps`,
+BF16/INT8 benchmarks и замкнутый ROS2-контур в симуляторе LIBERO.
 
-Реализованы воспроизводимое обучение и оценка на H100, BF16/INT8 benchmarks,
-два ROS2-узла с неблокирующим инференсом и Compose runtime для замкнутого
-эпизода LIBERO. Собственная BF16-модель получила 97/100 success против 87/100
-у готового checkpoint; ROS2 closed loop на RTX 5070 Ti завершился успешно.
-Сырые результаты хранятся в `artifacts/results`. Публичный репозиторий:
-[github.com/dezertod11/smolvla-sim](https://github.com/dezertod11/smolvla-sim).
+Собственная BF16-модель получила **97/100 успешных эпизодов** против 87/100 у
+`HuggingFaceVLA/smolvla_libero`. Docker, MuJoCo EGL, LIBERO и ROS2 closed loop
+проверены на **NVIDIA GeForce RTX 5070 Ti**. Веса модели находятся во внешнем
+хранилище и не включены в Git или Docker image.
 
-## Документы и начало работы с Codex
+## Быстрый запуск
 
-- [`AGENTS.md`](AGENTS.md) — правила для агента, среды, ограничения и проверки.
-- [`docs/TASK.md`](docs/TASK.md) — полный исходный текст задания и чек-лист приёмки.
-- [`docs/STATUS.md`](docs/STATUS.md) — выполненная работа, доказательства и следующий этап.
-- [`docs/REPORT.md`](docs/REPORT.md) — краткий отчёт о принятых решениях.
-- Этот README — назначение проекта и команды запуска.
-- [`docs/AUTONOMY.md`](docs/AUTONOMY.md) — управление экспериментами и план сдачи.
-- [`docs/RUN_BUDGET.md`](docs/RUN_BUDGET.md) — бюджет, требующий согласования до обучения.
-- [`docs/VSCODE_HANDOFF.md`](docs/VSCODE_HANDOFF.md) — передача единственного управляющего в IDE.
+Требования:
 
-В Codex внутри VS Code можно начать сообщением:
+- Windows с Ubuntu WSL2 и Docker Desktop с включённой WSL integration;
+- актуальный NVIDIA-драйвер с поддержкой CUDA для RTX 5070 Ti;
+- Git, Docker Compose v2 и не менее 25 ГБ свободного места.
 
-> Прочитай AGENTS.md и указанные в нём документы. Проверь рабочую папку,
-> состояние Git и путь к Python. Объясни, что уже готово, и предложи план
-> следующего этапа из docs/STATUS.md. Пока не запускай обучение и не меняй среду.
-
-Исходное задание сохранено в репозитории, поэтому доступ к DOCX в Downloads
-на ноутбуке для продолжения работы не требуется.
-
-Перенос Docker на D: описан в
-[`setup/RECOVERY_2026-10-06.md`](setup/RECOVERY_2026-10-06.md).
-Исправление HOME и запуска редактора от 12 октября — в
-[`setup/CONNECTION_REPAIR_2026-10-12.md`](setup/CONNECTION_REPAIR_2026-10-12.md).
-
-## Чистая установка и запуск на ПК-1
-
-После установки Git, Ubuntu WSL и Docker Desktop проект запускается четырьмя
-командами в Ubuntu WSL. Bootstrap создаёт внешний Docker volume и собирает
-закреплённый образ; checkpoint скачивается из публичного GitHub Release и
-проверяется по SHA256:
+Чистая установка и запуск одного замкнутого эпизода выполняются четырьмя
+командами:
 
 ```bash
 git clone https://github.com/dezertod11/smolvla-sim.git && cd smolvla-sim
@@ -52,264 +29,176 @@ bash scripts/download_own_checkpoint.sh
 bash scripts/pc1.sh up runtime
 ```
 
-Последняя команда запускает оба ROS2-узла и один замкнутый эпизод. Повторный
-обычный запуск требует только последней команды. Веса хранятся во внешнем
-`ROBOTICS_DATA_DIR`, не входят в Git или Docker image.
-Публичный checkpoint: [SmolVLA LIBERO Object v1](https://github.com/dezertod11/smolvla-sim/releases/tag/smolvla-libero-object-v1).
+Bootstrap создаёт внешний Docker volume и собирает закреплённый образ. Скрипт
+загрузки получает [собственный checkpoint](https://github.com/dezertod11/smolvla-sim/releases/tag/smolvla-libero-object-v1)
+и проверяет каждый файл по SHA256. Последняя команда запускает `sim_node` и
+`smolvla_node`; процесс завершается после результата эпизода.
 
-## Ежедневная работа на подготовленном ПК-1
-
-Запустить Docker Desktop на ПК-1, затем `setup/Open-PC1.cmd` на ноутбуке.
-Для Codex подключите Happ **на ноутбуке** до открытия проекта. Launcher запускает
-скрытый SSH-туннель к его HTTP-прокси и восстанавливает туннель после обрыва сети.
-Ноутбук должен оставаться включённым, Happ — подключённым. Открытый ранее
-проект можно продолжать использовать; после перезагрузки ноутбука снова откройте
-его через launcher. Подробнее: [`setup/CODEX_NETWORK.md`](setup/CODEX_NETWORK.md).
-Этот launcher запускает PowerShell-скрипт с разрешением только для своего процесса,
-не меняя постоянную Execution Policy. Он открывает VS Code с отдельным
-каталогом настроек `%LOCALAPPDATA%\SmolVLA-VSCode`, подключается к
-`nlp-pc-2026` и сразу открывает Dev Container проекта, папку `/workspace`.
-Перед запуском восстанавливает обязательный Docker-wrapper, сохраняя остальные
-предпочтения и резервную копию изменяемого settings.json. Настройка wrapper
-исключена из Settings Sync. Для открытия только WSL можно запустить
-`Open-PC1.ps1` без параметра `-Container`.
-Отдельные настройки нужны для Docker CLI проекта: этот параметр VS Code
-имеет область application и игнорируется в workspace settings.
-Обычные настройки редактора для учебных проектов сохраняются.
-
-Следующие команды выполняются **в Ubuntu WSL на ПК-1**, из
-`/home/alexander/projects/smolvla-sim`, вне контейнера:
-
-```bash
-cp -n .env.example .env
-bash scripts/pc1.sh up -d dev
-bash scripts/pc1.sh exec dev bash scripts/check.sh
-```
-
-Образ уже собран. `bash scripts/pc1.sh build` нужен после изменений Dockerfile;
-перед пересборкой проверьте место на диске хранилища Docker Desktop и на C:.
-Обычный запуск и Dev Containers используют только готовый образ: сборка вынесена
-в `compose.build.yaml`, загрузка отсутствующего образа запрещена. Если образ
-не найден, сначала проверьте Docker Engine; не запускайте сборку автоматически.
-На ПК-1 используется Docker Desktop с WSL integration для Ubuntu. Перед работой
-запустите Docker Desktop на ПК-1. Wrapper проверяет выбранный движок и не допускает
-случайной работы с отдельным Docker Engine внутри Ubuntu.
-
-После успешных проверок запустить один эпизод готовой модели:
-
-```bash
-bash scripts/pc1.sh exec dev bash scripts/eval_reference.sh
-```
-
-Это проверка окружения, а не измерение success rate: для отчёта требуются
-все 10 задач и не менее 10 эпизодов на задачу, сравнение моделей и квантизации.
-Обучение при настройке проекта автоматически не запускается.
-
-В VS Code установить Dev Containers в удалённом контексте и выбрать
-**Dev Containers: Reopen in Container**. Python контейнера: `/opt/venv/bin/python`.
-Для терминала WSL с сохранением процесса: `bash scripts/open_tmux.sh`.
-Отсоединение от tmux: Ctrl+B, затем D. Для длительных команд можно запускать
-`bash scripts/pc1.sh exec -T dev ...` из tmux.
-
-**В терминале VS Code внутри контейнера** команды выполняются напрямую:
-
-```bash
-cd /workspace
-python -m pytest -q
-ruff check .
-```
-
-Python уже установлен в `/opt/venv/bin/python`, активировать ещё одну venv не нужно.
-Полная проверка среды: `bash scripts/check.sh`; отдельно ROS-инфраструктура:
-`bash scripts/check_ros_package.sh`; один reference-эпизод:
-`bash scripts/eval_reference.sh` (может скачивать веса).
-Wrapper `scripts/pc1.sh` предназначен для WSL хоста, не для вложенного запуска
-Docker из контейнера. Код меняется без пересборки образа.
-
-`/workspace` подключён к исходникам WSL, `/data` — к данным на D:.
-Домашняя папка `/data/home` отдельно смонтирована из постоянного Linux-тома
-`smolvla-sim-home` внутри Docker Desktop на D:. Там находятся VS Code Server,
-расширения и история Codex; Windows-папка `D:\Robotics\smolvla-sim\home`
-сохранена как резервная копия состояния до переноса и больше не является
-рабочим HOME. Том объявлен external: обычный `compose down -v` его не удаляет.
-Не удаляйте `smolvla-sim-home` вручную. Он уже подготовлен на ПК-1; на новой
-машине до первого запуска нужно создать том и обеспечить владельца UID/GID 1000
-для его корня. Это часть подготовки среды, не ежедневного запуска.
-Код, данные и домашняя папка сохраняются при пересоздании контейнера. Закрытие VS Code не
-останавливает контейнер (`shutdownAction: none`); для длительных вычислений
-используйте tmux и сохраняйте логи отдельно.
-
-Проект использует отдельный Docker CLI config в `.runtime/docker-cli`, чтобы
-не зависеть от старого credential helper Docker Desktop. Команды проекта
-запускаются через `scripts/pc1.sh`. Параметр `GALLIUM_DRIVER=d3d12` применяется
-только в WSL override; обычный Linux использует `compose.yaml` без override.
-
-## Данные и воспроизводимость
-
-Код ПК-1: `/home/alexander/projects/smolvla-sim`.
-Веса, HF cache, видео и результаты: `/mnt/d/Robotics/smolvla-sim`, смонтирован
-в контейнер как `/data`. Веса и датасеты не входят в Git или Docker-образ.
-Дампы/кэш, перенесённые для освобождения C:, находятся отдельно в
-`D:\Archives\robotics-setup-20261002`.
-
-LeRobot закреплён на коммите `8fff0fde7c79f23a93d845d1a50e985de01f8b8a`
-(v0.4.4). Все Python-зависимости перечислены в `requirements.lock`;
-`requirements.ros.txt` закрепляет совместимую с colcon версию setuptools в ROS-образе.
-Ревизии моделей и датасета указаны в `configs/artifacts.json`.
-Версии ОС внутри образа сохраняются в `/opt/os-packages.txt`.
-Для обновления зависимостей сначала меняются `.in`, затем пересоздаются lock
-и повторяются проверки; существующие учебные окружения не используются.
-
-## H100
-
-Подключение с ноутбука: `setup/Open-H100.ps1`. Оно проходит через ПК-1 и его
-Windows OpenSSH: приватный ключ остаётся на ПК-1. Прямой Linux SSH на ПК-1
-может не работать из-за различий сетевого маршрута.
-
-Единственный разрешённый корень работы:
-`/home/jovyan/shares/SR006.nfs2/spiridonov/malnev_world_model`.
-Каталог этого проекта внутри него: `smolvla-sim`.
-
-```bash
-cd /home/jovyan/shares/SR006.nfs2/spiridonov/malnev_world_model/smolvla-sim
-.venv/bin/python scripts/h100_run.py --mode smoke -- .venv/bin/python scripts/h100_cuda_check.py
-```
-
-Для восстановления окружения есть `bash scripts/bootstrap_h100.sh`;
-на подготовленном сервере повторять его при каждом подключении не нужно.
-Команды H100 выполняются в
-терминале сервера, не в контейнере ПК-1. Из WSL ПК-1 вход также доступен через
-`bash scripts/h100_ssh.sh --interactive`.
-
-Профиль H100 использует отдельный lock с CUDA 12.6 для проверенного драйвера
-560.35.03; ПК-1 использует CUDA 12.8 для Blackwell. Python и код одинаковые.
-GPU 0 запрещена. Управляемые задания выбирают свободную GPU 1–7 и держат
-отдельный lease; одновременно допускаются не более трёх заданий. Занятая карта
-не используется даже при явном `--gpu`.
-Проверка свободной памяти не резервирует GPU для других пользователей сервера;
-для длительных запусков нужно учитывать совместное использование ресурса.
-Кэши, временные файлы и результаты H100 хранятся внутри `.runtime` проекта.
-
-## Разработка
-
-Исходный код: `src/smolvla_service`; ROS2-пакет: `ros2_ws/src/vla_bridge`.
-CPU-проверки: `pytest -q` и `ruff check .`. GitHub Actions реально выполнен на
-публичном репозитории: [успешный CPU checks run](https://github.com/dezertod11/smolvla-sim/actions/runs/38211994098).
-
-На ноутбуке код лежит в `C:\Users\malne\Projects\smolvla-sim`, вне OneDrive.
-После коммита `setup/Sync-PC1.ps1` отправляет изменения на ПК-1;
-`setup/Sync-PC1.ps1 -Pull` забирает сделанные там коммиты. Используется собственный
-bare Git-репозиторий на ПК-1; публичная копия находится на GitHub по ссылке в
-начале README.
-Перед сменой машины завершайте и коммитьте изменения. Синхронизация H100:
-`bash scripts/sync_h100.sh` на ПК-1, только из чистого Git-дерева.
-
-## Экспериментальный протокол
-
-Конфиг [`configs/train_libero_object.json`](configs/train_libero_object.json)
-использует 454 эпизода `libero_object`, seed 42, batch size 16, 30 000 шагов и
-AdamW с learning rate 1e-4. Обучаются action expert и проекции состояния,
-действия и времени; VLM и vision encoder заморожены. Такой выбор сохраняет
-универсальные визуально-языковые признаки и направляет ограниченный бюджет на
-новое пространство состояний и действий LIBERO. Используются глобальные
-mean/std закреплённого датасета, камеры переименовываются явным `rename_map`.
-
-Основной запуск завершил 30 000 шагов за 2 ч 59 мин на одной H100. Loss снизился
-с 0.545 на шаге 50 до 0.047; повторная загрузка итогового checkpoint и настоящий
-BF16 forward прошли успешно. CSV, summary и данные проверки checkpoint находятся
-в [`artifacts/results/training`](artifacts/results/training).
-
-![Кривая loss](artifacts/results/training/loss.png)
-
-Финальный протокол закреплён в
-[`configs/evaluation_protocol.json`](configs/evaluation_protocol.json): задачи
-0–9, по 10 эпизодов, seed 10000+, одинаковые начальные состояния для пяти
-вариантов. В него входят reference BF16 n=10, своя BF16 с n=1/10/50 и своя INT8
-n=10. Сырые outcomes проходят независимую проверку количества задач, эпизодов и
-агрегированной success rate.
-
-## Результаты оценки
-
-Все значения ниже получены локальными запусками на закреплённых версиях кода и
-весов; это не цифры из статьи. Во всех строках использованы одни задачи, seed
-10000+ и по 10 эпизодов на каждую из 10 задач. Проверенный агрегат и сырые
-outcomes находятся в [`artifacts/results/summary`](artifacts/results/summary).
-
-| Вариант | Precision | n_action_steps | Success | Среднее время эпизода |
-|---|---:|---:|---:|---:|
-| `HuggingFaceVLA/smolvla_libero` | BF16 | 10 | 87/100 (87%) | 29.03 с |
-| собственная модель | BF16 | 1 | 85/100 (85%) | 51.95 с |
-| собственная модель | BF16 | 10 | **97/100 (97%)** | **23.54 с** |
-| собственная модель | BF16 | 50 | 71/100 (71%) | 24.71 с |
-| собственная модель | INT8 | 10 | 0/100 (0%) | 41.54 с |
-
-`n_action_steps=10` оказался лучшим компромиссом. При `n=1` политика чаще
-пересчитывает действие и эпизод занимает в 2.2 раза больше времени. При `n=50`
-она долго выполняет устаревший план и теряет 26 процентных пунктов success rate.
-
-## Квантизация и latency
-
-Latency измерена для одного вызова после warmup. Каждый CUDA sample окружён
-`torch.cuda.synchronize()`. Размер — сериализованные веса, peak CUDA — максимум,
-зафиксированный PyTorch во время benchmark. Полные отчёты находятся в
-[`artifacts/results/bench-bf16-cuda`](artifacts/results/bench-bf16-cuda),
-[`bench-int8-cuda`](artifacts/results/bench-int8-cuda) и
-[`bench-bf16-cpu`](artifacts/results/bench-bf16-cpu).
-
-| Вариант | Устройство | p50 | p95 | Размер | Peak CUDA | Success, n=10 |
-|---|---|---:|---:|---:|---:|---:|
-| BF16 | H100 GPU | **155.83 мс** | **156.90 мс** | 906.7 МБ | 993.3 МБ | **97/100** |
-| INT8 `Linear8bitLt` | H100 GPU | 363.40 мс | 364.98 мс | **548.2 МБ** | **651.2 МБ** | 0/100 |
-| BF16 | CPU сервера | 2998.81 мс | 3047.31 мс | 906.7 МБ | — | 97/100¹ |
-
-¹ Success взят из BF16 GPU rollout: precision и checkpoint те же; CPU-строка
-измеряет только latency. Использованный bitsandbytes INT8 backend требует CUDA,
-поэтому CPU latency для него неприменима.
-
-INT8 уменьшил файл на 39.5% и peak memory на 34.4%, но стал в 2.3 раза медленнее
-BF16 на H100 и провалил все 100 эпизодов. Для Jetson Orin 16 ГБ я выбрал бы
-BF16, `n_action_steps=10`: измеренный peak меньше 1 ГБ, а success максимален.
-Перед продуктовым развёртыванием стоит отдельно проверить FP16/TensorRT на самом
-Orin; текущую INT8-схему использовать нельзя без calibration-aware квантизации и
-повторной closed-loop оценки.
-
-## Видео и ROS2
-
-Репрезентативные записи:
-
-- [готовая модель, успешный эпизод](artifacts/videos/reference-bf16-n10-success-task0-episode0.mp4);
-- [собственная BF16 n=10, успешный эпизод](artifacts/videos/own-bf16-n10-success-task0-episode0.mp4);
-- [собственная BF16 n=10, неудачный эпизод](artifacts/videos/own-bf16-n10-failure-task2-episode7.mp4);
-- [полный запуск `docker compose up`, ускоренная запись 1 мин 54 с](artifacts/videos/docker-compose-up.mp4).
-
-Финальный ROS2 closed loop выполнен на RTX 5070 Ti: два узла обменивались двумя
-изображениями, состоянием и семимерным действием, после 149 действий симулятор
-записал `ROS2_EPISODE_RESULT success=True`. Состояние managed job и полный лог
-сохранены в [`artifacts/results/ros2-own-final`](artifacts/results/ros2-own-final).
-Там же находятся исходный terminal transcript, timing и SHA256 видеозаписи;
-Compose runtime завершился с кодом 0 и результатом `success=True`, 159 действий.
-
-Для итогового запуска на ПК-1 checkpoint должен находиться в
-`/data/models/own-final`. Его можно получить проверяемой командой
-`bash scripts/download_own_checkpoint.sh`. Команда ниже запускает оба ROS2-узла
-и один эпизод; параметр `precision` (`bf16` или `int8`) читается из YAML;
-обычный `up` также оставляет активным сервис редактора `dev`:
+Для повторного запуска достаточно:
 
 ```bash
 bash scripts/pc1.sh up runtime
 ```
 
-Для разработки без эпизода используйте `bash scripts/pc1.sh up -d dev`.
-Веса монтируются из D: и не входят в Git или образ.
+## Проверки
 
-## Ограничения и что дальше
+CPU-тесты и статический анализ выполняются внутри контейнера:
 
-Оценка покрывает только десять задач `libero_object` и 100 фиксированных
-начальных состояний на вариант. H100 latency нельзя переносить на Orin без
-замера на целевом устройстве; CPU benchmark также относится к CPU сервера.
-MuJoCo не моделирует все эффекты камер, приводов и контакта реального SO-101.
-Для sim-to-real нужны реальные демонстрации, калибровка камер и кинематики,
-ограничения скорости и усилия, safety layer и постепенная hardware-валидация.
+```bash
+bash scripts/pc1.sh up -d dev
+bash scripts/pc1.sh exec -T dev bash scripts/check.sh
+```
 
-Первоначальные проверки: `setup/VALIDATION.md`. Актуальные проверки Docker
-Desktop и инструкции восстановления: `setup/RECOVERY_2026-10-06.md`.
+Проверка включает Ruff и 46 тестов pytest. Тесты не требуют GPU, весов или
+запущенного ROS graph. Они покрывают:
+
+- RGB HWC `uint8` → нормализованный CHW tensor;
+- семимерное действие → ROS-совместимое сообщение;
+- загрузку и валидацию YAML-параметров;
+- асинхронный single-flight inference;
+- обработку некорректных данных;
+- расчёт метрик и INT8-конвертацию с mock-моделью.
+
+Тот же CPU-набор запускается в
+[GitHub Actions](https://github.com/dezertod11/smolvla-sim/actions/workflows/ci.yml).
+
+## Структура
+
+```text
+configs/                         конфигурации обучения и оценки
+docker/                          образ ROS2 Jazzy + LeRobot + CUDA
+ros2_ws/src/vla_bridge/          ROS2-пакет, launch и YAML
+src/smolvla_service/             inference, преобразования и квантизация
+scripts/                         bootstrap, обучение, оценка и benchmarks
+tests/                           CPU unit-тесты
+artifacts/results/               loss, outcomes, latency и ROS2-логи
+artifacts/videos/                записи успешных и неуспешных эпизодов
+docs/REPORT.md                   краткий отчёт
+docs/TASK.md                     исходные требования
+```
+
+LeRobot закреплён на коммите
+`8fff0fde7c79f23a93d845d1a50e985de01f8b8a` (`v0.4.4`). Python-зависимости
+закреплены в `requirements.lock`, ROS2-зависимости — в
+`requirements.ros.txt`, ревизии моделей и датасета — в
+`configs/artifacts.json`. Используются ROS2 Jazzy, Ubuntu 24.04, Python 3.12,
+MuJoCo EGL и LIBERO.
+
+## Обучение
+
+Конфигурация [`configs/train_libero_object.json`](configs/train_libero_object.json)
+использует 454 демонстрации `libero_object` — 66 984 кадра для десяти задач.
+Камеры и состояния согласованы с моделью через явный `rename_map`.
+
+Основные параметры:
+
+| Параметр | Значение |
+|---|---:|
+| Seed | 42 |
+| Batch size | 16 |
+| Шаги | 30 000 |
+| Optimizer | AdamW |
+| Learning rate | `1e-4` |
+| Warmup | 1 000 шагов |
+| Precision | BF16 AMP |
+| `chunk_size` | 50 |
+| `n_action_steps` при основной оценке | 10 |
+
+VLM и vision encoder заморожены. Обучаются action expert и проекции состояния,
+действия и времени: **99 880 992** из 450 046 176 параметров. Это сохраняет
+предобученные визуально-языковые признаки и направляет обучение на управление
+манипулятором.
+
+Запуск завершил 30 000 шагов за 2 ч 59 мин. Loss снизился с 0,545 на шаге 50
+до 0,047; минимальное значение — 0,045. Итоговый checkpoint повторно загружен
+и проверен настоящим BF16 forward. Артефакты:
+
+- [`loss.csv`](artifacts/results/training/loss.csv);
+- [`loss.png`](artifacts/results/training/loss.png);
+- [`training_summary.json`](artifacts/results/training/training_summary.json);
+- [`checkpoint_validation.json`](artifacts/results/training/checkpoint_validation.json).
+
+![Кривая loss](artifacts/results/training/loss.png)
+
+## Протокол оценки
+
+Все варианты используют одинаковые задачи 0–9, по десять эпизодов на задачу и
+одинаковые начальные состояния с seed 10000+. Протокол закреплён в
+[`configs/evaluation_protocol.json`](configs/evaluation_protocol.json).
+
+| Вариант | Precision | `n_action_steps` | Success | Среднее время эпизода |
+|---|---:|---:|---:|---:|
+| `HuggingFaceVLA/smolvla_libero` | BF16 | 10 | 87/100 (87%) | 29,03 с |
+| собственная модель | BF16 | 1 | 85/100 (85%) | 51,95 с |
+| собственная модель | BF16 | 10 | **97/100 (97%)** | **23,54 с** |
+| собственная модель | BF16 | 50 | 71/100 (71%) | 24,71 с |
+| собственная модель | INT8 | 10 | 0/100 (0%) | 41,54 с |
+
+`n_action_steps=10` дал лучший компромисс. При `n=1` политика чаще выполняет
+inference, поэтому эпизод длится в 2,2 раза дольше. При `n=50` политика дольше
+исполняет устаревший план и теряет 26 процентных пунктов success rate.
+
+Сырые результаты и проверенный агрегат находятся в
+[`artifacts/results/summary`](artifacts/results/summary).
+
+## Квантизация и latency
+
+INT8 реализован заменой крупных `Linear` на `bitsandbytes.Linear8bitLt`.
+Маленькие слои и `lm_head` исключаются и перечисляются в отчёте. Перед замерами
+выполняется warm-up; каждый CUDA sample ограничен
+`torch.cuda.synchronize()`. Таблица содержит реальные p50/p95, размер
+сериализованных весов и peak memory PyTorch.
+
+| Вариант | Устройство | p50 | p95 | Размер | Peak CUDA | Success, n=10 |
+|---|---|---:|---:|---:|---:|---:|
+| BF16 | CUDA GPU | **155,83 мс** | **156,90 мс** | 906,7 МБ | 993,3 МБ | **97/100** |
+| INT8 `Linear8bitLt` | CUDA GPU | 363,40 мс | 364,98 мс | **548,2 МБ** | **651,2 МБ** | 0/100 |
+| BF16 | CPU | 2998,81 мс | 3047,31 мс | 906,7 МБ | — | 97/100¹ |
+
+¹ Для CPU приведена только latency; success относится к той же BF16-модели в
+GPU rollout. Использованный INT8 backend требует CUDA.
+
+INT8 уменьшил размер на 39,5% и peak memory на 34,4%, но оказался в 2,3 раза
+медленнее BF16 и получил 0/100. Для Jetson Orin 16 ГБ рекомендуется BF16 с
+`n_action_steps=10`. Перед эксплуатацией на Orin необходимо отдельно измерить
+FP16/TensorRT на самом устройстве; текущую INT8-схему использовать нельзя без
+calibration-aware квантизации и повторной closed-loop оценки.
+
+## ROS2
+
+Пакет `vla_bridge` содержит два узла:
+
+- `sim_node` публикует `/camera/image_raw`, `/camera/wrist/image_raw` и
+  `/robot_state`, принимает `/vla/action` и делает шаг LIBERO;
+- `smolvla_node` собирает согласованный snapshot, выполняет inference в отдельном
+  single-flight worker и публикует семимерное действие.
+
+Executor продолжает принимать сообщения во время inference. Если камеры или
+состояние отсутствуют либо устарели, watchdog пишет предупреждение и ждёт новые
+данные. Путь checkpoint, инструкция, устройство, `bf16`/`int8`,
+`n_action_steps`, частота и timeout задаются в
+[`libero_object_own_final.yaml`](ros2_ws/src/vla_bridge/config/libero_object_own_final.yaml).
+
+Один launch-файл поднимает оба узла. Финальный closed loop на **RTX 5070 Ti**
+успешно завершил эпизод; точный Compose-запуск вернул код 0 и результат
+`success=True` после 159 действий. Transcript, timing, checksum и метаданные
+находятся в
+[`artifacts/results/ros2-own-final`](artifacts/results/ros2-own-final).
+
+## Видео
+
+- [готовая модель, успешный эпизод](artifacts/videos/reference-bf16-n10-success-task0-episode0.mp4);
+- [собственная BF16, успешный эпизод](artifacts/videos/own-bf16-n10-success-task0-episode0.mp4);
+- [собственная BF16, неуспешный эпизод](artifacts/videos/own-bf16-n10-failure-task2-episode7.mp4);
+- [полный запуск Docker Compose, ускоренная запись 1 мин 54 с](artifacts/videos/docker-compose-up.mp4).
+
+## Ограничения
+
+Оценка охватывает только десять задач `libero_object` и 100 фиксированных
+начальных состояний на вариант. Измерения CUDA GPU и CPU нельзя переносить на
+Jetson Orin без проверки на целевом устройстве. MuJoCo не моделирует все эффекты
+камер, приводов и контакта реального SO-101. Для sim-to-real нужны реальные
+демонстрации, калибровка камер и кинематики, ограничения скорости и усилия,
+safety layer и постепенная аппаратная валидация.
+
+Краткое обоснование решений приведено в [`docs/REPORT.md`](docs/REPORT.md).
