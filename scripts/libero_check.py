@@ -1,11 +1,15 @@
 """Reset, step and render an actual LIBERO task using both policy cameras."""
 
+import argparse
 import json
 import os
 from pathlib import Path
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output", type=Path)
+    args = parser.parse_args()
     from configure_libero import configure
 
     configure()
@@ -21,7 +25,9 @@ def main():
     env = OffScreenRenderEnv(
         bddl_file_name=str(bddl), camera_heights=256, camera_widths=256
     )
-    output = Path(os.environ.get("ROBOTICS_OUTPUT_DIR", "/data/checks/libero"))
+    output = args.output or Path(
+        os.environ.get("ROBOTICS_OUTPUT_DIR", "/data/checks/libero")
+    )
     output.mkdir(parents=True, exist_ok=True)
     try:
         env.seed(0)

@@ -1,0 +1,10 @@
+{
+  "id": "h100-egl-check-001",
+  "backend": "h100",
+  "kind": "eval",
+  "timeout_seconds": 180,
+  "command": [
+    "{python}", "scripts/libero_check.py",
+    "--output", "{output}"
+  ]
+}
