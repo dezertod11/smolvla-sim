@@ -8,6 +8,7 @@ from pathlib import Path
 
 import draccus
 import torch
+from lerobot.configs.policies import PreTrainedConfig
 from lerobot.configs.train import TrainPipelineConfig
 from lerobot.datasets.factory import make_dataset
 from lerobot.policies.factory import make_policy, make_pre_post_processors
@@ -43,21 +44,28 @@ def main():
     project = Path(__file__).resolve().parents[1]
     raw = json.loads((project / "configs/train_libero_object.json").read_text())
     config = prepare(raw, args.data.resolve(), args.data / "benchmark-unused", 1, 1, 2, 0)
-    config["policy"]["pretrained_path"] = str(args.checkpoint.resolve())
-    config["policy"]["device"] = args.device
     cfg = draccus.decode(TrainPipelineConfig, config)
     cfg.validate()
     dataset = make_dataset(cfg)
-    policy = make_policy(cfg.policy, ds_meta=dataset.meta, rename_map=cfg.rename_map).eval()
+    policy_cfg = PreTrainedConfig.from_pretrained(args.checkpoint)
+    policy_cfg.pretrained_path = str(args.checkpoint.resolve())
+    policy_cfg.vlm_model_name = str(args.data / "models/vlm")
+    policy_cfg.device = args.device
+    expects_adapted_cameras = "observation.images.camera1" in policy_cfg.input_features
+    rename_map = cfg.rename_map if expects_adapted_cameras else {}
+    policy = make_policy(
+        policy_cfg, ds_meta=dataset.meta, rename_map=rename_map
+    ).eval()
     quantization = None
     if args.precision == "int8":
         policy, quantization = quantize_linear_int8(policy)
     overrides = {
         "device_processor": {"device": args.device},
-        "rename_observations_processor": {"rename_map": cfg.rename_map},
+        "rename_observations_processor": {"rename_map": rename_map},
+        "tokenizer_processor": {"tokenizer_name": str(args.data / "models/vlm")},
     }
     preprocessor, _ = make_pre_post_processors(
-        cfg.policy, pretrained_path=str(args.checkpoint), preprocessor_overrides=overrides
+        policy_cfg, pretrained_path=str(args.checkpoint), preprocessor_overrides=overrides
     )
     source_batch = next(iter(DataLoader(dataset, batch_size=1, num_workers=0)))
     batch = {

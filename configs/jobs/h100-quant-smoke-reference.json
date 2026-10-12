@@ -1,5 +1,5 @@
 {
-  "id": "h100-quant-smoke-reference-001",
+  "id": "h100-quant-smoke-reference-002",
   "backend": "h100",
   "kind": "eval",
   "timeout_seconds": 600,
