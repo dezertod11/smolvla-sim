@@ -1,0 +1,357 @@
+[
+  {
+    "label": "reference-bf16-n10",
+    "precision": "bf16",
+    "n_action_steps": 10,
+    "episodes": 100,
+    "successes": 87,
+    "success_rate": 0.87,
+    "tasks": [
+      {
+        "task_id": 0,
+        "episodes": 10,
+        "successes": 9,
+        "success_rate": 0.9
+      },
+      {
+        "task_id": 1,
+        "episodes": 10,
+        "successes": 9,
+        "success_rate": 0.9
+      },
+      {
+        "task_id": 2,
+        "episodes": 10,
+        "successes": 7,
+        "success_rate": 0.7
+      },
+      {
+        "task_id": 3,
+        "episodes": 10,
+        "successes": 9,
+        "success_rate": 0.9
+      },
+      {
+        "task_id": 4,
+        "episodes": 10,
+        "successes": 9,
+        "success_rate": 0.9
+      },
+      {
+        "task_id": 5,
+        "episodes": 10,
+        "successes": 8,
+        "success_rate": 0.8
+      },
+      {
+        "task_id": 6,
+        "episodes": 10,
+        "successes": 10,
+        "success_rate": 1.0
+      },
+      {
+        "task_id": 7,
+        "episodes": 10,
+        "successes": 10,
+        "success_rate": 1.0
+      },
+      {
+        "task_id": 8,
+        "episodes": 10,
+        "successes": 9,
+        "success_rate": 0.9
+      },
+      {
+        "task_id": 9,
+        "episodes": 10,
+        "successes": 7,
+        "success_rate": 0.7
+      }
+    ],
+    "mean_episode_seconds": 29.030108029842378
+  },
+  {
+    "label": "own-bf16-n1",
+    "precision": "bf16",
+    "n_action_steps": 1,
+    "episodes": 100,
+    "successes": 85,
+    "success_rate": 0.85,
+    "tasks": [
+      {
+        "task_id": 0,
+        "episodes": 10,
+        "successes": 9,
+        "success_rate": 0.9
+      },
+      {
+        "task_id": 1,
+        "episodes": 10,
+        "successes": 10,
+        "success_rate": 1.0
+      },
+      {
+        "task_id": 2,
+        "episodes": 10,
+        "successes": 7,
+        "success_rate": 0.7
+      },
+      {
+        "task_id": 3,
+        "episodes": 10,
+        "successes": 8,
+        "success_rate": 0.8
+      },
+      {
+        "task_id": 4,
+        "episodes": 10,
+        "successes": 9,
+        "success_rate": 0.9
+      },
+      {
+        "task_id": 5,
+        "episodes": 10,
+        "successes": 9,
+        "success_rate": 0.9
+      },
+      {
+        "task_id": 6,
+        "episodes": 10,
+        "successes": 7,
+        "success_rate": 0.7
+      },
+      {
+        "task_id": 7,
+        "episodes": 10,
+        "successes": 7,
+        "success_rate": 0.7
+      },
+      {
+        "task_id": 8,
+        "episodes": 10,
+        "successes": 9,
+        "success_rate": 0.9
+      },
+      {
+        "task_id": 9,
+        "episodes": 10,
+        "successes": 10,
+        "success_rate": 1.0
+      }
+    ],
+    "mean_episode_seconds": 51.946256070137025
+  },
+  {
+    "label": "own-bf16-n10",
+    "precision": "bf16",
+    "n_action_steps": 10,
+    "episodes": 100,
+    "successes": 97,
+    "success_rate": 0.97,
+    "tasks": [
+      {
+        "task_id": 0,
+        "episodes": 10,
+        "successes": 10,
+        "success_rate": 1.0
+      },
+      {
+        "task_id": 1,
+        "episodes": 10,
+        "successes": 10,
+        "success_rate": 1.0
+      },
+      {
+        "task_id": 2,
+        "episodes": 10,
+        "successes": 9,
+        "success_rate": 0.9
+      },
+      {
+        "task_id": 3,
+        "episodes": 10,
+        "successes": 10,
+        "success_rate": 1.0
+      },
+      {
+        "task_id": 4,
+        "episodes": 10,
+        "successes": 10,
+        "success_rate": 1.0
+      },
+      {
+        "task_id": 5,
+        "episodes": 10,
+        "successes": 9,
+        "success_rate": 0.9
+      },
+      {
+        "task_id": 6,
+        "episodes": 10,
+        "successes": 10,
+        "success_rate": 1.0
+      },
+      {
+        "task_id": 7,
+        "episodes": 10,
+        "successes": 10,
+        "success_rate": 1.0
+      },
+      {
+        "task_id": 8,
+        "episodes": 10,
+        "successes": 10,
+        "success_rate": 1.0
+      },
+      {
+        "task_id": 9,
+        "episodes": 10,
+        "successes": 9,
+        "success_rate": 0.9
+      }
+    ],
+    "mean_episode_seconds": 23.54217410326004
+  },
+  {
+    "label": "own-bf16-n50",
+    "precision": "bf16",
+    "n_action_steps": 50,
+    "episodes": 100,
+    "successes": 71,
+    "success_rate": 0.71,
+    "tasks": [
+      {
+        "task_id": 0,
+        "episodes": 10,
+        "successes": 10,
+        "success_rate": 1.0
+      },
+      {
+        "task_id": 1,
+        "episodes": 10,
+        "successes": 6,
+        "success_rate": 0.6
+      },
+      {
+        "task_id": 2,
+        "episodes": 10,
+        "successes": 7,
+        "success_rate": 0.7
+      },
+      {
+        "task_id": 3,
+        "episodes": 10,
+        "successes": 5,
+        "success_rate": 0.5
+      },
+      {
+        "task_id": 4,
+        "episodes": 10,
+        "successes": 7,
+        "success_rate": 0.7
+      },
+      {
+        "task_id": 5,
+        "episodes": 10,
+        "successes": 5,
+        "success_rate": 0.5
+      },
+      {
+        "task_id": 6,
+        "episodes": 10,
+        "successes": 9,
+        "success_rate": 0.9
+      },
+      {
+        "task_id": 7,
+        "episodes": 10,
+        "successes": 4,
+        "success_rate": 0.4
+      },
+      {
+        "task_id": 8,
+        "episodes": 10,
+        "successes": 10,
+        "success_rate": 1.0
+      },
+      {
+        "task_id": 9,
+        "episodes": 10,
+        "successes": 8,
+        "success_rate": 0.8
+      }
+    ],
+    "mean_episode_seconds": 24.710211000442506
+  },
+  {
+    "label": "own-int8-n10",
+    "precision": "int8",
+    "n_action_steps": 10,
+    "episodes": 100,
+    "successes": 0,
+    "success_rate": 0.0,
+    "tasks": [
+      {
+        "task_id": 0,
+        "episodes": 10,
+        "successes": 0,
+        "success_rate": 0.0
+      },
+      {
+        "task_id": 1,
+        "episodes": 10,
+        "successes": 0,
+        "success_rate": 0.0
+      },
+      {
+        "task_id": 2,
+        "episodes": 10,
+        "successes": 0,
+        "success_rate": 0.0
+      },
+      {
+        "task_id": 3,
+        "episodes": 10,
+        "successes": 0,
+        "success_rate": 0.0
+      },
+      {
+        "task_id": 4,
+        "episodes": 10,
+        "successes": 0,
+        "success_rate": 0.0
+      },
+      {
+        "task_id": 5,
+        "episodes": 10,
+        "successes": 0,
+        "success_rate": 0.0
+      },
+      {
+        "task_id": 6,
+        "episodes": 10,
+        "successes": 0,
+        "success_rate": 0.0
+      },
+      {
+        "task_id": 7,
+        "episodes": 10,
+        "successes": 0,
+        "success_rate": 0.0
+      },
+      {
+        "task_id": 8,
+        "episodes": 10,
+        "successes": 0,
+        "success_rate": 0.0
+      },
+      {
+        "task_id": 9,
+        "episodes": 10,
+        "successes": 0,
+        "success_rate": 0.0
+      }
+    ],
+    "mean_episode_seconds": 41.53904034137726
+  }
+]
