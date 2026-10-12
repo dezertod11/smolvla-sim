@@ -119,7 +119,9 @@ def main():
         },
         "serialized_bytes": serialized_bytes,
         "peak_cuda_bytes": torch.cuda.max_memory_allocated() if args.device == "cuda" else None,
-        "autocast_dtype": str(torch.get_autocast_dtype(args.device)),
+        # infer() requests BF16 explicitly.  Reporting PyTorch's process default
+        # here used to say FP16 on CUDA even though the timed context was BF16.
+        "autocast_dtype": str(torch.bfloat16),
         "quantization": quantization,
     }
     (args.output / "benchmark.json").write_text(json.dumps(result, indent=2) + "\n")

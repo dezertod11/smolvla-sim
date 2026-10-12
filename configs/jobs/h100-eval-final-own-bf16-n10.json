@@ -5,7 +5,7 @@
   "timeout_seconds": 5400,
   "command": [
     "{python}", "scripts/eval_managed.py",
-    "--checkpoint", "{data}/jobs/h100-train-main-001/output/checkpoints/030000/pretrained_model",
+    "--checkpoint", "{data}/runs/h100-train-main-001/output/checkpoints/030000/pretrained_model",
     "--data", "{data}",
     "--output", "{output}",
     "--n-action-steps", "10",

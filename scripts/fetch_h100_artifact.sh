@@ -8,7 +8,7 @@ case "${1:-}" in
     destination=/mnt/d/Robotics/smolvla-sim/models/vlm
     ;;
   own-final)
-    remote=.runtime/jobs/h100/h100-train-main-001/output/checkpoints/030000/pretrained_model
+    remote=.runtime/runs/h100-train-main-001/output/checkpoints/030000/pretrained_model
     destination=/mnt/d/Robotics/smolvla-sim/models/own-final
     ;;
   *)

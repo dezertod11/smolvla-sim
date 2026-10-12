@@ -5,7 +5,7 @@
   "timeout_seconds": 600,
   "command": [
     "{python}", "scripts/benchmark_policy.py",
-    "--checkpoint", "{data}/jobs/h100-train-main-001/output/checkpoints/030000/pretrained_model",
+    "--checkpoint", "{data}/runs/h100-train-main-001/output/checkpoints/030000/pretrained_model",
     "--data", "{data}",
     "--output", "{output}",
     "--device", "cuda",
