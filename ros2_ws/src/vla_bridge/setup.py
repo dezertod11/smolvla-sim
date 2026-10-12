@@ -10,6 +10,7 @@ setup(
         ("share/ament_index/resource_index/packages", ["resource/vla_bridge"]),
         ("share/vla_bridge", ["package.xml"]),
         ("share/vla_bridge/launch", glob("launch/*.launch.py")),
+        ("share/vla_bridge/config", glob("config/*.yaml")),
     ],
     install_requires=["setuptools"],
     zip_safe=True,
@@ -17,6 +18,8 @@ setup(
         "console_scripts": [
             "runtime_publisher = vla_bridge.runtime_probe:publisher",
             "runtime_subscriber = vla_bridge.runtime_probe:subscriber",
+            "sim_node = vla_bridge.sim_node:main",
+            "smolvla_node = vla_bridge.smolvla_node:main",
         ]
     },
 )
