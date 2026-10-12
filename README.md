@@ -111,7 +111,8 @@ VLM и vision encoder заморожены. Обучаются action expert и 
 
 Запуск завершил 30 000 шагов за 2 ч 59 мин. Loss снизился с 0,545 на шаге 50
 до 0,047; минимальное значение — 0,045. Итоговый checkpoint повторно загружен
-и проверен настоящим BF16 forward. Артефакты:
+и проверен настоящим BF16 forward. Метрики записывались в W&B offline и
+экспортированы в воспроизводимые CSV/PNG/JSON. Артефакты:
 
 - [`loss.csv`](artifacts/results/training/loss.csv);
 - [`loss.png`](artifacts/results/training/loss.png);
@@ -140,6 +141,8 @@ inference, поэтому эпизод длится в 2,2 раза дольше
 
 Сырые результаты и проверенный агрегат находятся в
 [`artifacts/results/summary`](artifacts/results/summary).
+
+![Сравнение success rate и времени эпизода](artifacts/results/summary/evaluation_comparison.png)
 
 ## Квантизация и latency
 
@@ -201,4 +204,6 @@ Jetson Orin без проверки на целевом устройстве. Mu
 демонстрации, калибровка камер и кинематики, ограничения скорости и усилия,
 safety layer и постепенная аппаратная валидация.
 
-Краткое обоснование решений приведено в [`docs/REPORT.md`](docs/REPORT.md).
+Краткое обоснование решений приведено в [`docs/REPORT.md`](docs/REPORT.md) и
+[одностраничном PDF](output/pdf/smolvla_report.pdf). Полная сверка требований с
+доказательствами находится в [`docs/ACCEPTANCE.md`](docs/ACCEPTANCE.md).
