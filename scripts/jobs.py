@@ -243,6 +243,8 @@ def worker(root, run_id):
                     if used >= 1024 or total - used < 12000 or util >= 10:
                         raise RuntimeError("PC1 GPU is busy; no other process will be stopped")
                 env["CUDA_VISIBLE_DEVICES"] = str(gpu)
+                # CUDA remaps the selected physical card to logical device 0 for EGL/MuJoCo.
+                env["MUJOCO_EGL_DEVICE_ID"] = "0"
                 state["physical_gpu"] = gpu
                 write(run / "gpu_before.json", rows)
             mapping = {"{python}": str(python), "{project}": str(run / "source"),
