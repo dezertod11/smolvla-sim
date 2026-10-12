@@ -58,7 +58,7 @@ H100 предназначен прежде всего для обучения.
 
 ```bash
 cp -n .env.example .env
-bash scripts/pc1.sh up -d
+bash scripts/pc1.sh up -d dev
 bash scripts/pc1.sh exec dev bash scripts/check.sh
 ```
 

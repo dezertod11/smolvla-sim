@@ -1,5 +1,5 @@
 services:
-  dev:
+  dev: &wsl-gpu
     group_add:
       - "${WSL_VIDEO_GID:-44}"
       - "${WSL_RENDER_GID:-992}"
@@ -11,3 +11,5 @@ services:
       - /dev/dri:/dev/dri
     volumes:
       - /usr/lib/wsl:/usr/lib/wsl:ro
+  runtime:
+    <<: *wsl-gpu

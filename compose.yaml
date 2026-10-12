@@ -1,33 +1,42 @@
 name: smolvla-sim
+x-service: &service
+  image: smolvla-sim:dev
+  pull_policy: never
+  init: true
+  user: "1000:1000"
+  working_dir: /workspace
+  gpus: all
+  shm_size: 2gb
+  environment: &environment
+    HF_HOME: /data/huggingface
+    HOME: /data/home
+    XDG_CACHE_HOME: /data/cache
+    NUMBA_CACHE_DIR: /data/cache/numba
+    LIBERO_CONFIG_PATH: /data/libero-config
+    MUJOCO_GL: egl
+    PYTHONPATH: /workspace/src:/opt/ros/jazzy/lib/python3.12/site-packages
+    LD_LIBRARY_PATH: /opt/ros/jazzy/lib:/opt/ros/jazzy/lib/x86_64-linux-gnu
+    ROS_DOMAIN_ID: "73"
+    ROS_AUTOMATIC_DISCOVERY_RANGE: LOCALHOST
+    WANDB_MODE: offline
+    NVIDIA_DRIVER_CAPABILITIES: compute,utility,graphics
+  volumes:
+    - .:/workspace
+    - ${ROBOTICS_DATA_DIR:?Set ROBOTICS_DATA_DIR in .env}:/data
+    # Linux filesystem for VS Code, Codex state and Unix sockets.
+    # Keep HOME's path stable; the old Windows folder stays as a backup.
+    - dev-home:/data/home
+
 services:
   dev:
-    image: smolvla-sim:dev
-    pull_policy: never
-    init: true
-    user: "1000:1000"
-    working_dir: /workspace
+    <<: *service
     command: ["sleep", "infinity"]
-    gpus: all
-    shm_size: 2gb
-    environment:
-      HF_HOME: /data/huggingface
-      HOME: /data/home
-      XDG_CACHE_HOME: /data/cache
-      NUMBA_CACHE_DIR: /data/cache/numba
-      LIBERO_CONFIG_PATH: /data/libero-config
-      MUJOCO_GL: egl
-      PYTHONPATH: /workspace/src:/opt/ros/jazzy/lib/python3.12/site-packages
-      LD_LIBRARY_PATH: /opt/ros/jazzy/lib:/opt/ros/jazzy/lib/x86_64-linux-gnu
-      ROS_DOMAIN_ID: "73"
-      ROS_AUTOMATIC_DISCOVERY_RANGE: LOCALHOST
-      WANDB_MODE: offline
-      NVIDIA_DRIVER_CAPABILITIES: compute,utility,graphics
-    volumes:
-      - .:/workspace
-      - ${ROBOTICS_DATA_DIR:?Set ROBOTICS_DATA_DIR in .env}:/data
-      # Linux filesystem for VS Code, Codex state and Unix sockets.
-      # Keep HOME's path stable; the old Windows folder stays as a backup.
-      - dev-home:/data/home
+  runtime:
+    <<: *service
+    command:
+      - bash
+      - scripts/run_ros2_episode.sh
+      - /workspace/ros2_ws/src/vla_bridge/config/libero_object_own_final.yaml
 
 volumes:
   dev-home:
