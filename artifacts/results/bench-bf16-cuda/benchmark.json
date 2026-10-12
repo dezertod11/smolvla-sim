@@ -1,0 +1,38 @@
+{
+  "checkpoint": "/home/jovyan/shares/SR006.nfs2/spiridonov/malnev_world_model/smolvla-sim/.runtime/runs/h100-train-main-001/output/checkpoints/030000/pretrained_model",
+  "device": "cuda",
+  "precision": "bf16",
+  "warmup": 5,
+  "iterations": 20,
+  "latency_ms": {
+    "median": 155.83417,
+    "p50": 155.83417,
+    "p95": 156.89839335000002,
+    "samples": [
+      156.241121,
+      156.298265,
+      155.950682,
+      155.777764,
+      155.866239,
+      155.649018,
+      155.746072,
+      155.730054,
+      155.747398,
+      155.742173,
+      155.855139,
+      155.733503,
+      155.179025,
+      155.69137,
+      156.271399,
+      158.60593,
+      156.808523,
+      156.544913,
+      155.813201,
+      156.44782
+    ]
+  },
+  "serialized_bytes": 906712520,
+  "peak_cuda_bytes": 993264640,
+  "autocast_dtype": "torch.bfloat16",
+  "quantization": null
+}
