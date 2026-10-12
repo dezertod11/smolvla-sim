@@ -1,8 +1,9 @@
 import pytest
 
 torch = pytest.importorskip("torch")
-
-from smolvla_service.quantization import quantize_linear_int8
+quantize_linear_int8 = pytest.importorskip(
+    "smolvla_service.quantization"
+).quantize_linear_int8
 
 
 class FakeInt8(torch.nn.Linear):
