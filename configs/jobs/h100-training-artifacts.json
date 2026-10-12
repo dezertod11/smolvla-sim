@@ -1,0 +1,12 @@
+{
+  "id": "h100-training-artifacts-001",
+  "backend": "h100",
+  "kind": "check",
+  "timeout_seconds": 120,
+  "command": [
+    "{python}", "scripts/plot_training_loss.py",
+    "{data}/runs/h100-train-main-001/console.log",
+    "{output}",
+    "--log-frequency", "50"
+  ]
+}
