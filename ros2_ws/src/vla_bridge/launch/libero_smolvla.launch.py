@@ -30,5 +30,11 @@ def generate_launch_description():
                     on_exit=[EmitEvent(event=Shutdown(reason="LIBERO sim stopped"))],
                 )
             ),
+            RegisterEventHandler(
+                OnProcessExit(
+                    target_action=policy,
+                    on_exit=[EmitEvent(event=Shutdown(reason="SmolVLA policy stopped"))],
+                )
+            ),
         ]
     )
