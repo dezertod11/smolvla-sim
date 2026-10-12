@@ -6,7 +6,6 @@ import json
 import re
 from pathlib import Path
 
-
 METRIC = re.compile(
     r"INFO [^\r\n]*?loss:(?P<loss>[0-9.eE+-]+) "
     r"grdn:(?P<grad>[0-9.eE+-]+) lr:(?P<lr>[0-9.eE+-]+)"

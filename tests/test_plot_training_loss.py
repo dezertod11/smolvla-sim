@@ -1,7 +1,6 @@
 import importlib.util
 from pathlib import Path
 
-
 SCRIPT = Path(__file__).parents[1] / "scripts" / "plot_training_loss.py"
 SPEC = importlib.util.spec_from_file_location("plot_training_loss", SCRIPT)
 MODULE = importlib.util.module_from_spec(SPEC)
