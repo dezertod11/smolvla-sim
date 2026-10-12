@@ -1,0 +1,16 @@
+{
+  "id": "h100-benchmark-own-bf16-cpu-001",
+  "backend": "h100",
+  "kind": "check",
+  "timeout_seconds": 120,
+  "command": [
+    "{python}", "scripts/benchmark_policy.py",
+    "--checkpoint", "{data}/jobs/h100-train-main-001/output/checkpoints/030000/pretrained_model",
+    "--data", "{data}",
+    "--output", "{output}",
+    "--device", "cpu",
+    "--precision", "bf16",
+    "--warmup", "2",
+    "--iterations", "5"
+  ]
+}
