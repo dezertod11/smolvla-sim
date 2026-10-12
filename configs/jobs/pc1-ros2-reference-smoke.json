@@ -1,8 +1,8 @@
 {
-  "id": "pc1-ros2-reference-smoke-003",
+  "id": "pc1-ros2-reference-smoke-004",
   "backend": "pc1",
   "kind": "eval",
-  "timeout_seconds": 900,
+  "timeout_seconds": 600,
   "command": [
     "bash", "scripts/run_ros2_episode.sh",
     "{project}/ros2_ws/src/vla_bridge/config/libero_object_reference_smoke.yaml"

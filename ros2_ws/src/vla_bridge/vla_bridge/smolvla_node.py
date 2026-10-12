@@ -28,13 +28,14 @@ def decode_image(message):
 
 
 class PolicyRunner:
-    def __init__(self, checkpoint, task, n_action_steps, device):
+    def __init__(self, checkpoint, vlm_model, task, n_action_steps, device):
         config = PreTrainedConfig.from_pretrained(checkpoint)
         if not isinstance(config, SmolVLAConfig):
             raise TypeError(f"Expected SmolVLA checkpoint, got {type(config).__name__}")
         config.device = device
         config.n_action_steps = n_action_steps
         config.pretrained_path = checkpoint
+        config.vlm_model_name = vlm_model
         env_config = LiberoEnvConfig(task="libero_object", task_ids=[0])
         self.policy = make_policy(config, env_cfg=env_config).eval()
         self.env_pre, self.env_post = make_env_pre_post_processors(env_config, config)
@@ -74,12 +75,14 @@ class SmolVLANode(Node):
     def __init__(self):
         super().__init__("smolvla")
         self.declare_parameter("checkpoint", "/data/models/reference")
+        self.declare_parameter("vlm_model", "/data/models/vlm")
         self.declare_parameter("task", "pick up the orange juice and place it in the basket")
         self.declare_parameter("n_action_steps", 10)
         self.declare_parameter("inference_hz", 10.0)
         self.declare_parameter("input_timeout_s", 2.0)
         self.declare_parameter("device", "cuda")
         checkpoint = self.get_parameter("checkpoint").value
+        vlm_model = self.get_parameter("vlm_model").value
         task = self.get_parameter("task").value
         steps = int(self.get_parameter("n_action_steps").value)
         device = self.get_parameter("device").value
@@ -91,7 +94,9 @@ class SmolVLANode(Node):
         self.create_subscription(Image, "/camera/image_raw", self.on_camera, 1)
         self.create_subscription(Image, "/camera/wrist/image_raw", self.on_wrist, 1)
         self.create_subscription(Float32MultiArray, "/robot_state", self.on_state, 1)
-        self.runner = AsyncInference(PolicyRunner(checkpoint, task, steps, device))
+        self.runner = AsyncInference(
+            PolicyRunner(checkpoint, vlm_model, task, steps, device)
+        )
         period = 1.0 / float(self.get_parameter("inference_hz").value)
         self.create_timer(period, self.tick)
 

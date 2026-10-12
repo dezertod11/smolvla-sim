@@ -8,6 +8,7 @@ libero_sim:
 smolvla:
   ros__parameters:
     checkpoint: /data/models/reference
+    vlm_model: /data/models/vlm
     task: pick up the alphabet soup and place it in the basket
     n_action_steps: 10
     inference_hz: 10.0
