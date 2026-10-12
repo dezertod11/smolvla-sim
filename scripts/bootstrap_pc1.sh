@@ -11,4 +11,7 @@ if ! bash scripts/docker.sh volume inspect smolvla-sim-home >/dev/null 2>&1; the
 fi
 bash scripts/docker.sh compose -f compose.yaml -f compose.wsl.yaml \
   -f compose.build.yaml build dev
+bash scripts/docker.sh run --rm --user 0:0 \
+  -v smolvla-sim-home:/data/home smolvla-sim:dev \
+  chown -R 1000:1000 /data/home
 echo "PC1 bootstrap complete. Download the checkpoint, then run: bash scripts/pc1.sh up runtime"

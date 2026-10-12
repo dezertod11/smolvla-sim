@@ -55,6 +55,7 @@ bash scripts/pc1.sh up runtime
 Последняя команда запускает оба ROS2-узла и один замкнутый эпизод. Повторный
 обычный запуск требует только последней команды. Веса хранятся во внешнем
 `ROBOTICS_DATA_DIR`, не входят в Git или Docker image.
+Публичный checkpoint: [SmolVLA LIBERO Object v1](https://github.com/dezertod11/smolvla-sim/releases/tag/smolvla-libero-object-v1).
 
 ## Ежедневная работа на подготовленном ПК-1
 

@@ -1,0 +1,113 @@
+Script started on 2026-10-12 10:30:52+03:00 [COMMAND="bash scripts/pc1.sh up runtime" <not executed on terminal>]
+[?25l[0G[+] up 0/1
+ [33m⠋[0m Container smolvla-sim-runtime-1 Recreate                                 [34m0.1s[0m
+[?25h[?25l[2A[0G[+] up 0/1
+ [33m⠙[0m Container smolvla-sim-runtime-1 Recreate                                 [34m0.2s[0m
+[?25h[?25l[2A[0G[+] up 0/1
+ [33m⠹[0m Container smolvla-sim-runtime-1 Recreate                                 [34m0.3s[0m
+[?25h[?25l[2A[0G[+] up 1/1
+ [32m✔[0m Container smolvla-sim-runtime-1 [32mRecreated[0m                                [34m0.4s[0m
+[?25h[33mWARN[0m[0000] could not start menu, an error occurred while starting: Error while reading terminfo data:terminfo: TERM environment variable not set 
+Attaching to runtime-1
+[36mruntime-1  | [0mStarting >>> vla_bridge
+[36mruntime-1  | [0mFinished <<< vla_bridge [2.30s]
+[36mruntime-1  | [0m
+[36mruntime-1  | [0mSummary: 1 package finished [2.53s]
+[36mruntime-1  | [0m[INFO] [launch]: All log files can be found below /data/home/.ros/log/2026-10-12-07-30-58-550651-ebfd4b0367d7-42
+[36mruntime-1  | [0m[INFO] [launch]: Default logging verbosity is set to INFO
+[36mruntime-1  | [0m[INFO] [sim_node-1]: process started with pid [48]
+[36mruntime-1  | [0m[INFO] [smolvla_node-2]: process started with pid [49]
+[36mruntime-1  | [0m[sim_node-1] /opt/venv/lib/python3.12/site-packages/robosuite/__init__.py:30: SyntaxWarning: invalid escape sequence '\ '
+[36mruntime-1  | [0m[sim_node-1]   __logo__ = """
+[36mruntime-1  | [0m[sim_node-1] [robosuite WARNING] No private macro file found! (__init__.py:7)
+[36mruntime-1  | [0m[sim_node-1] WARNING:robosuite_logs:No private macro file found!
+[36mruntime-1  | [0m[sim_node-1] [robosuite WARNING] It is recommended to use a private macro file (__init__.py:8)
+[36mruntime-1  | [0m[sim_node-1] WARNING:robosuite_logs:It is recommended to use a private macro file
+[36mruntime-1  | [0m[sim_node-1] [robosuite WARNING] To setup, run: python /opt/venv/lib/python3.12/site-packages/robosuite/scripts/setup_macros.py (__init__.py:9)
+[36mruntime-1  | [0m[sim_node-1] WARNING:robosuite_logs:To setup, run: python /opt/venv/lib/python3.12/site-packages/robosuite/scripts/setup_macros.py
+[36mruntime-1  | [0m[sim_node-1] libEGL warning: egl: failed to create dri2 screen
+[36mruntime-1  | [0m[sim_node-1] libEGL warning: NEEDS EXTENSION: falling back to kms_swrast
+[36mruntime-1  | [0m[smolvla_node-2] `torch_dtype` is deprecated! Use `dtype` instead!
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790339.368784537] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790344.437286329] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790349.536862754] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790354.536891117] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790359.636735534] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790370.938473364] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790387.737084905] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790392.836787709] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790397.937011272] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790402.938230602] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790408.037304901] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790416.337051553] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790421.336764640] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790426.336815098] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790431.437819131] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790436.536869680] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790443.337090905] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790448.436842160] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790453.436836942] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790458.538414867] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790463.636962245] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790468.736814696] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790473.736927104] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790478.837066951] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790483.936931817] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790489.039216718] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790494.137471161] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790499.236812616] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790504.236877703] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790509.336803004] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790514.436816650] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790519.539533900] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790524.937666602] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790530.037055735] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790535.036904695] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790540.137501919] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790546.337183234] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790558.837243491] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790563.937122349] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790568.936802295] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790573.937048200] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790579.037081686] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790584.038117332] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790589.137052049] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790594.137161909] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790599.236910128] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790604.236856422] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[sim_node-1] [INFO] [1791790606.341132798] [libero_sim]: ROS2_EPISODE_RESULT success=True actions=195
+[36mruntime-1  | [0m[sim_node-1] [info] using task orders [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+[36mruntime-1  | [0m[sim_node-1] Local assets not found. Downloading from HuggingFace Hub...
+[36mruntime-1  | [0m[sim_node-1] Assets already downloaded at /data/home/.cache/libero/assets
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790609.337923910] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[smolvla_node-2] [WARN] [1791790614.437456362] [smolvla]: Waiting for fresh camera and robot-state messages
+[36mruntime-1  | [0m[INFO] [sim_node-1]: process has finished cleanly [pid 48]
+[36mruntime-1  | [0m[INFO] [smolvla_node-2]: sending signal 'SIGINT' to process[smolvla_node-2]
+[36mruntime-1  | [0m[smolvla_node-2] Loading  /data/models/vlm weights ...
+[36mruntime-1  | [0m[smolvla_node-2] Reducing the number of VLM layers to 16 ...
+[36mruntime-1  | [0m[smolvla_node-2] Loading weights from local directory
+[36mruntime-1  | [0m[smolvla_node-2] Traceback (most recent call last):
+[36mruntime-1  | [0m[smolvla_node-2]   File "/workspace/ros2_ws/install/vla_bridge/lib/vla_bridge/smolvla_node", line 33, in <module>
+[36mruntime-1  | [0m[smolvla_node-2]     sys.exit(load_entry_point('vla-bridge', 'console_scripts', 'smolvla_node')())
+[36mruntime-1  | [0m[smolvla_node-2]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[36mruntime-1  | [0m[smolvla_node-2]   File "/workspace/ros2_ws/build/vla_bridge/vla_bridge/smolvla_node.py", line 165, in main
+[36mruntime-1  | [0m[smolvla_node-2]     rclpy.spin(node)
+[36mruntime-1  | [0m[smolvla_node-2]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/__init__.py", line 247, in spin
+[36mruntime-1  | [0m[smolvla_node-2]     executor.spin_once()
+[36mruntime-1  | [0m[smolvla_node-2]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 926, in spin_once
+[36mruntime-1  | [0m[smolvla_node-2]     self._spin_once_impl(timeout_sec)
+[36mruntime-1  | [0m[smolvla_node-2]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 907, in _spin_once_impl
+[36mruntime-1  | [0m[smolvla_node-2]     handler, entity, node = self.wait_for_ready_callbacks(
+[36mruntime-1  | [0m[smolvla_node-2]                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[36mruntime-1  | [0m[smolvla_node-2]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 877, in wait_for_ready_callbacks
+[36mruntime-1  | [0m[smolvla_node-2]     return next(self._cb_iter)
+[36mruntime-1  | [0m[smolvla_node-2]            ^^^^^^^^^^^^^^^^^^^
+[36mruntime-1  | [0m[smolvla_node-2]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 781, in _wait_for_ready_callbacks
+[36mruntime-1  | [0m[smolvla_node-2]     wait_set.wait(timeout_nsec)
+[36mruntime-1  | [0m[smolvla_node-2] KeyboardInterrupt
+[36mruntime-1  | [0m[ERROR] [smolvla_node-2]: process[smolvla_node-2] failed to terminate '5' seconds after receiving 'SIGINT', escalating to 'SIGTERM'
+[36mruntime-1  | [0m[INFO] [smolvla_node-2]: sending signal 'SIGTERM' to process[smolvla_node-2]
+[36mruntime-1  | [0m[ERROR] [smolvla_node-2]: process has died [pid 49, exit code -2, cmd '/workspace/ros2_ws/install/vla_bridge/lib/vla_bridge/smolvla_node --ros-args --params-file /workspace/ros2_ws/src/vla_bridge/config/libero_object_own_final.yaml'].
+[36m[Kruntime-1 exited with code 0
+[0m
+Script done on 2026-10-12 10:37:03+03:00 [COMMAND_EXIT_CODE="0"]

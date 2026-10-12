@@ -498,5 +498,9 @@ terminal transcript и timing находятся в `artifacts/results/ros2-own-
 Добавлены четыре команды чистой установки: clone, bootstrap образа/volume,
 скачивание checkpoint с проверкой SHA256, Compose runtime. Bootstrap реально
 выполнен на ПК-1. Собственный checkpoint подготовлен как публичный GitHub Release
-`smolvla-libero-object-v1`; веса остаются вне Git и Docker image.
+`smolvla-libero-object-v1`; все семь assets имеют состояние `uploaded`, веса
+остаются вне Git и Docker image. Четыре README-команды дополнительно выполнены
+из нового публичного клона: повторный closed loop завершился `success=True`
+после 195 действий и кодом 0. Transcript сохранён как
+`artifacts/results/ros2-own-final/fresh-clone-runtime.typescript`.
 

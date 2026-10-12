@@ -1,0 +1,14 @@
+{
+  "source": "https://github.com/dezertod11/smolvla-sim.git",
+  "source_commit": "19025172941d1674ac5c648ce58710202d45b566",
+  "commands": [
+    "git clone https://github.com/dezertod11/smolvla-sim.git && cd smolvla-sim",
+    "bash scripts/bootstrap_pc1.sh",
+    "bash scripts/download_own_checkpoint.sh",
+    "bash scripts/pc1.sh up runtime"
+  ],
+  "checkpoint_sha256_verified": true,
+  "compose_exit_code": 0,
+  "episode_success": true,
+  "actions": 195
+}
