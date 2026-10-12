@@ -6,12 +6,12 @@ from threading import Lock
 import numpy as np
 import rclpy
 import torch
+from lerobot.configs.policies import PreTrainedConfig
 from lerobot.envs.configs import LiberoEnv as LiberoEnvConfig
 from lerobot.envs.factory import make_env_pre_post_processors
 from lerobot.envs.utils import preprocess_observation
-from lerobot.policies.factory import make_pre_post_processors
+from lerobot.policies.factory import make_policy, make_pre_post_processors
 from lerobot.policies.smolvla.configuration_smolvla import SmolVLAConfig
-from lerobot.policies.smolvla.modeling_smolvla import SmolVLAPolicy
 from rclpy.node import Node
 from sensor_msgs.msg import Image
 from std_msgs.msg import Float32MultiArray
@@ -29,12 +29,14 @@ def decode_image(message):
 
 class PolicyRunner:
     def __init__(self, checkpoint, task, n_action_steps, device):
-        config = SmolVLAConfig.from_pretrained(checkpoint)
+        config = PreTrainedConfig.from_pretrained(checkpoint)
+        if not isinstance(config, SmolVLAConfig):
+            raise TypeError(f"Expected SmolVLA checkpoint, got {type(config).__name__}")
         config.device = device
         config.n_action_steps = n_action_steps
         config.pretrained_path = checkpoint
-        self.policy = SmolVLAPolicy.from_pretrained(checkpoint, config=config).eval()
         env_config = LiberoEnvConfig(task="libero_object", task_ids=[0])
+        self.policy = make_policy(config, env_cfg=env_config).eval()
         self.env_pre, self.env_post = make_env_pre_post_processors(env_config, config)
         overrides = {
             "device_processor": {"device": device},

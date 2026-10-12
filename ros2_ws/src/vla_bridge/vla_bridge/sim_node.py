@@ -60,6 +60,9 @@ class SimNode(Node):
         self.camera.publish(image_message(self, observation["pixels"]["image"]))
         self.wrist.publish(image_message(self, observation["pixels"]["image2"]))
         tensor_obs = preprocess_observation(observation)
+        # LiberoProcessorStep expects vector-env batch dimensions in robot_state.
+        # The direct env already provides the equivalent 8D agent_pos with a batch.
+        tensor_obs.pop("observation.robot_state", None)
         tensor_obs = self.state_processor.observation(tensor_obs)
         values = tensor_obs["observation.state"][0].cpu().numpy().astype(np.float32)
         self.state.publish(Float32MultiArray(data=values.tolist()))
