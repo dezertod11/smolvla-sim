@@ -52,7 +52,12 @@ def main():
             image = Image.new("RGB", (1280, 720), "#111827")
             draw = ImageDraw.Draw(image)
             draw.rectangle((0, 0, 1280, 58), fill="#0b1220")
-            draw.text((24, 16), "docker compose up — ROS2 closed loop", font=title_font, fill="#e5e7eb")
+            draw.text(
+                (24, 16),
+                "docker compose up — ROS2 closed loop",
+                font=title_font,
+                fill="#e5e7eb",
+            )
             draw.text(
                 (1010, 19),
                 f"{min(source_time, states[-1][0]):6.1f}s",
