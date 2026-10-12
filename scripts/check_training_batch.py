@@ -16,6 +16,8 @@ def main():
     project = Path(__file__).resolve().parents[1]
     data = Path(os.environ["ROBOTICS_DATA_DIR"])
     raw = json.loads((project / "configs/train_libero_object.json").read_text())
+    # Two verified episodes are enough to exercise the exact decoding/collation path.
+    raw["dataset"]["episodes"] = raw["dataset"]["episodes"][:2]
     resolved = prepare(raw, data, data / "batch-check-unused", steps=1, batch_size=2)
     cfg = draccus.decode(TrainPipelineConfig, resolved)
     cfg.validate()

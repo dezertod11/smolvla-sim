@@ -1,5 +1,5 @@
 {
-  "id": "h100-train-smoke-001",
+  "id": "h100-train-smoke-002",
   "backend": "h100",
   "kind": "train",
   "timeout_seconds": 600,
