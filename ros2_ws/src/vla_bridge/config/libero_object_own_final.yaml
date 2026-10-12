@@ -1,0 +1,17 @@
+libero_sim:
+  ros__parameters:
+    suite: libero_object
+    task_id: 0
+    init_state: 0
+    max_actions: 280
+    stop_after_episode: true
+    observation_hz: 10.0
+smolvla:
+  ros__parameters:
+    checkpoint: /data/models/own-final
+    vlm_model: /data/models/vlm
+    task: pick up the alphabet soup and place it in the basket
+    n_action_steps: 10
+    inference_hz: 10.0
+    input_timeout_s: 2.0
+    device: cuda

@@ -31,6 +31,7 @@ class SimNode(Node):
         self.declare_parameter("init_state", 0)
         self.declare_parameter("max_actions", 280)
         self.declare_parameter("stop_after_episode", False)
+        self.declare_parameter("observation_hz", 10.0)
         suite_name = self.get_parameter("suite").value
         task_id = int(self.get_parameter("task_id").value)
         init_state = int(self.get_parameter("init_state").value)
@@ -53,8 +54,12 @@ class SimNode(Node):
         self.wrist = self.create_publisher(Image, "/camera/wrist/image_raw", 1)
         self.state = self.create_publisher(Float32MultiArray, "/robot_state", 1)
         self.create_subscription(Float32MultiArray, "/vla/action", self.on_action, 1)
-        observation, _ = self.env.reset(seed=init_state)
-        self.publish_observation(observation)
+        self.observation, _ = self.env.reset(seed=init_state)
+        period = 1.0 / float(self.get_parameter("observation_hz").value)
+        self.create_timer(period, self.publish_current_observation)
+
+    def publish_current_observation(self):
+        self.publish_observation(self.observation)
 
     def publish_observation(self, observation):
         self.camera.publish(image_message(self, observation["pixels"]["image"]))
@@ -89,7 +94,8 @@ class SimNode(Node):
                 return
             observation, _ = self.env.reset()
             self.action_count = 0
-        self.publish_observation(observation)
+        self.observation = observation
+        self.publish_current_observation()
 
     def destroy_node(self):
         self.env.close()
