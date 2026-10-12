@@ -480,3 +480,23 @@ Loss CSV, PNG и JSON доказательства сохранены в `artifa
 собственная BF16 n=10 на GPU 1, INT8 n=10 на GPU 2 и BF16 n=50 на GPU 3.
 Все используют 10 задач × 10 эпизодов и общие seed 10000+. Следующий шаг —
 проверить сырые outcomes, затем запустить BF16 n=1 и два latency benchmark.
+## Финальная проверка поставки — 12 октября 2026, 10:20 MSK
+
+Формальные пробелы сдачи закрыты. ROS2 policy node принимает из YAML параметр
+`precision` со значениями `bf16`/`int8`; BF16 использует autocast, INT8 вызывает
+тот же проверенный bitsandbytes converter, что и финальная оценка. Добавлены
+CPU-тесты загрузки YAML и преобразования действия в ROS-совместимое сообщение.
+На ПК-1 прошли 46 pytest и Ruff.
+
+Точная команда из README `bash scripts/pc1.sh up runtime` проверена на RTX 5070 Ti.
+Compose создал `sim_node` и `smolvla_node`, замкнутый эпизод завершился
+`success=True` после 146 действий, runtime container вышел с кодом 0. Полный
+terminal transcript и timing находятся в `artifacts/results/ros2-own-final`,
+117-секундная запись — `artifacts/videos/docker-compose-up.mp4`; её SHA256 и
+метаданные — `compose-verification.json`.
+
+Добавлены четыре команды чистой установки: clone, bootstrap образа/volume,
+скачивание checkpoint с проверкой SHA256, Compose runtime. Bootstrap реально
+выполнен на ПК-1. Собственный checkpoint подготовлен как публичный GitHub Release
+`smolvla-libero-object-v1`; веса остаются вне Git и Docker image.
+
