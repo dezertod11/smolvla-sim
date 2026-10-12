@@ -49,6 +49,7 @@ class PolicyRunner:
             config, pretrained_path=checkpoint, preprocessor_overrides=overrides
         )
         self.task = task
+        self.device_type = torch.device(device).type
 
     def __call__(self, bundle):
         camera, wrist, state = bundle
@@ -58,7 +59,9 @@ class PolicyRunner:
         observation["task"] = [self.task]
         observation = self.env_pre(observation)
         observation = self.pre(observation)
-        with torch.inference_mode(), torch.autocast("cuda", dtype=torch.bfloat16):
+        with torch.inference_mode(), torch.autocast(
+            self.device_type, dtype=torch.bfloat16
+        ):
             action = self.policy.select_action(observation)
         action = self.post(action)
         action = self.env_post({"action": action})["action"]

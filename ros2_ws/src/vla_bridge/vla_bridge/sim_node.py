@@ -29,9 +29,14 @@ class SimNode(Node):
         self.declare_parameter("suite", "libero_object")
         self.declare_parameter("task_id", 0)
         self.declare_parameter("init_state", 0)
+        self.declare_parameter("max_actions", 280)
+        self.declare_parameter("stop_after_episode", False)
         suite_name = self.get_parameter("suite").value
         task_id = int(self.get_parameter("task_id").value)
         init_state = int(self.get_parameter("init_state").value)
+        self.max_actions = int(self.get_parameter("max_actions").value)
+        self.stop_after_episode = bool(self.get_parameter("stop_after_episode").value)
+        self.action_count = 0
         suite = benchmark.get_benchmark_dict()[suite_name]()
         self.env = LiberoEnv(
             task_suite=suite,
@@ -65,10 +70,18 @@ class SimNode(Node):
             self.get_logger().error("Ignoring action: expected seven finite values")
             return
         observation, _, terminated, _, info = self.env.step(action)
-        if terminated:
-            success = bool(info.get("is_success", False))
-            self.get_logger().info(f"Episode finished: success={success}; resetting")
+        self.action_count += 1
+        success = bool(info.get("is_success", False))
+        finished = terminated or success or self.action_count >= self.max_actions
+        if finished:
+            self.get_logger().info(
+                f"ROS2_EPISODE_RESULT success={success} actions={self.action_count}"
+            )
+            if self.stop_after_episode:
+                rclpy.shutdown()
+                return
             observation, _ = self.env.reset()
+            self.action_count = 0
         self.publish_observation(observation)
 
     def destroy_node(self):

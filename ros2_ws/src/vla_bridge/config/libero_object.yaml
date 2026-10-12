@@ -3,10 +3,12 @@ libero_sim:
     suite: libero_object
     task_id: 0
     init_state: 0
+    max_actions: 280
+    stop_after_episode: false
 smolvla:
   ros__parameters:
     checkpoint: /data/models/reference
-    task: pick up the orange juice and place it in the basket
+    task: pick up the alphabet soup and place it in the basket
     n_action_steps: 10
     inference_hz: 10.0
     input_timeout_s: 2.0
