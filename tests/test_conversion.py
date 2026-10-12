@@ -1,7 +1,9 @@
 import numpy as np
 import pytest
 
-from smolvla_service.conversion import action_to_list, image_to_chw
+from dataclasses import dataclass
+
+from smolvla_service.conversion import action_to_list, action_to_message, image_to_chw
 
 
 def test_rgb_channels_and_scaling():
@@ -28,3 +30,12 @@ def test_action_order_is_preserved():
     assert action_to_list([0, 1, -1, 0.5, -0.5, 0.25, 1]) == [
         0, 1, -1, 0.5, -0.5, 0.25, 1
     ]
+
+
+def test_action_is_converted_to_ros_compatible_message():
+    @dataclass
+    class FakeFloat32MultiArray:
+        data: list[float]
+
+    message = action_to_message(range(7), FakeFloat32MultiArray)
+    assert message.data == [0, 1, 2, 3, 4, 5, 6]

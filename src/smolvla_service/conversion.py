@@ -14,3 +14,8 @@ def action_to_list(action) -> list[float]:
     if values.shape != (7,) or not np.isfinite(values).all():
         raise ValueError("Expected seven finite LIBERO action values")
     return values.tolist()
+
+
+def action_to_message(action, message_type):
+    """Build a ROS-compatible message without importing ROS in CPU tests."""
+    return message_type(data=action_to_list(action))

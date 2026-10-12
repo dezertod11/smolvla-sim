@@ -38,7 +38,25 @@ H100 предназначен прежде всего для обучения.
 Исправление HOME и запуска редактора от 12 октября — в
 [`setup/CONNECTION_REPAIR_2026-10-12.md`](setup/CONNECTION_REPAIR_2026-10-12.md).
 
-## Запуск на ПК-1
+## Чистая установка и запуск на ПК-1
+
+После установки Git, Ubuntu WSL и Docker Desktop проект запускается четырьмя
+командами в Ubuntu WSL. Bootstrap создаёт внешний Docker volume и собирает
+закреплённый образ; checkpoint скачивается из публичного GitHub Release и
+проверяется по SHA256:
+
+```bash
+git clone https://github.com/dezertod11/smolvla-sim.git && cd smolvla-sim
+bash scripts/bootstrap_pc1.sh
+bash scripts/download_own_checkpoint.sh
+bash scripts/pc1.sh up runtime
+```
+
+Последняя команда запускает оба ROS2-узла и один замкнутый эпизод. Повторный
+обычный запуск требует только последней команды. Веса хранятся во внешнем
+`ROBOTICS_DATA_DIR`, не входят в Git или Docker image.
+
+## Ежедневная работа на подготовленном ПК-1
 
 Запустить Docker Desktop на ПК-1, затем `setup/Open-PC1.cmd` на ноутбуке.
 Для Codex подключите Happ **на ноутбуке** до открытия проекта. Launcher запускает
@@ -180,7 +198,8 @@ CPU-проверки: `pytest -q` и `ruff check .`. GitHub Actions реальн
 На ноутбуке код лежит в `C:\Users\malne\Projects\smolvla-sim`, вне OneDrive.
 После коммита `setup/Sync-PC1.ps1` отправляет изменения на ПК-1;
 `setup/Sync-PC1.ps1 -Pull` забирает сделанные там коммиты. Используется собственный
-bare Git-репозиторий на ПК-1; публичный репозиторий пока не создавался.
+bare Git-репозиторий на ПК-1; публичная копия находится на GitHub по ссылке в
+начале README.
 Перед сменой машины завершайте и коммитьте изменения. Синхронизация H100:
 `bash scripts/sync_h100.sh` на ПК-1, только из чистого Git-дерева.
 
@@ -267,7 +286,9 @@ Orin; текущую INT8-схему использовать нельзя бе�
 сохранены в [`artifacts/results/ros2-own-final`](artifacts/results/ros2-own-final).
 
 Для итогового запуска на ПК-1 checkpoint должен находиться в
-`/data/models/own-final`. Команда ниже запускает оба ROS2-узла и один эпизод;
+`/data/models/own-final`. Его можно получить проверяемой командой
+`bash scripts/download_own_checkpoint.sh`. Команда ниже запускает оба ROS2-узла
+и один эпизод; параметр `precision` (`bf16` или `int8`) читается из YAML;
 обычный `up` также оставляет активным сервис редактора `dev`:
 
 ```bash

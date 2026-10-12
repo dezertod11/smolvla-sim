@@ -17,8 +17,10 @@ from sensor_msgs.msg import Image
 from std_msgs.msg import Float32MultiArray
 
 from smolvla_service.async_inference import AsyncInference
-from smolvla_service.conversion import action_to_list
+from smolvla_service.conversion import action_to_list, action_to_message
 from smolvla_service.features import camera_rename_map
+from smolvla_service.quantization import quantize_linear_int8
+from smolvla_service.ros_config import SUPPORTED_PRECISIONS
 
 
 def decode_image(message):
@@ -29,7 +31,9 @@ def decode_image(message):
 
 
 class PolicyRunner:
-    def __init__(self, checkpoint, vlm_model, task, n_action_steps, device):
+    def __init__(self, checkpoint, vlm_model, task, n_action_steps, device, precision):
+        if precision not in SUPPORTED_PRECISIONS:
+            raise ValueError(f"Unsupported precision: {precision}")
         config = PreTrainedConfig.from_pretrained(checkpoint)
         if not isinstance(config, SmolVLAConfig):
             raise TypeError(f"Expected SmolVLA checkpoint, got {type(config).__name__}")
@@ -42,6 +46,10 @@ class PolicyRunner:
         self.policy = make_policy(
             config, env_cfg=env_config, rename_map=rename_map
         ).eval()
+        if precision == "int8":
+            self.policy, report = quantize_linear_int8(self.policy)
+            if report["converted_parameters"] == 0:
+                raise RuntimeError("INT8 requested but no linear parameters were converted")
         self.env_pre, self.env_post = make_env_pre_post_processors(env_config, config)
         overrides = {
             "device_processor": {"device": device},
@@ -53,6 +61,7 @@ class PolicyRunner:
         )
         self.task = task
         self.device_type = torch.device(device).type
+        self.precision = precision
 
     def __call__(self, bundle):
         camera, wrist, state = bundle
@@ -63,7 +72,9 @@ class PolicyRunner:
         observation = self.env_pre(observation)
         observation = self.pre(observation)
         with torch.inference_mode(), torch.autocast(
-            self.device_type, dtype=torch.bfloat16
+            self.device_type,
+            dtype=torch.bfloat16,
+            enabled=self.precision == "bf16",
         ):
             action = self.policy.select_action(observation)
         action = self.post(action)
@@ -81,11 +92,13 @@ class SmolVLANode(Node):
         self.declare_parameter("inference_hz", 10.0)
         self.declare_parameter("input_timeout_s", 2.0)
         self.declare_parameter("device", "cuda")
+        self.declare_parameter("precision", "bf16")
         checkpoint = self.get_parameter("checkpoint").value
         vlm_model = self.get_parameter("vlm_model").value
         task = self.get_parameter("task").value
         steps = int(self.get_parameter("n_action_steps").value)
         device = self.get_parameter("device").value
+        precision = self.get_parameter("precision").value
         self.timeout = float(self.get_parameter("input_timeout_s").value)
         self.lock = Lock()
         self.inputs = {}
@@ -95,7 +108,7 @@ class SmolVLANode(Node):
         self.create_subscription(Image, "/camera/wrist/image_raw", self.on_wrist, 1)
         self.create_subscription(Float32MultiArray, "/robot_state", self.on_state, 1)
         self.runner = AsyncInference(
-            PolicyRunner(checkpoint, vlm_model, task, steps, device)
+            PolicyRunner(checkpoint, vlm_model, task, steps, device, precision)
         )
         period = 1.0 / float(self.get_parameter("inference_hz").value)
         self.create_timer(period, self.tick)
@@ -121,7 +134,7 @@ class SmolVLANode(Node):
         try:
             action = self.runner.poll()
             if action is not None:
-                self.publisher.publish(Float32MultiArray(data=action))
+                self.publisher.publish(action_to_message(action, Float32MultiArray))
         except Exception as error:
             self.get_logger().error(f"Policy inference failed: {error}")
         now = time.monotonic()
