@@ -240,7 +240,10 @@ def worker(root, run_id):
                         raise RuntimeError("No idle unleased H100 GPU available")
                 else:
                     gpu, used, total, util = map(int, rows[0])
-                    if used >= 1024 or total - used < 12000 or util >= 10:
+                    # This is also the Windows display GPU; WSL reports several GiB
+                    # of graphics allocations without a compute process. The real
+                    # policy check measured ~1 GiB peak, so preserve an 8 GiB margin.
+                    if total - used < 8192 or util >= 10:
                         raise RuntimeError("PC1 GPU is busy; no other process will be stopped")
                 env["CUDA_VISIBLE_DEVICES"] = str(gpu)
                 # robosuite validates this value against the physical IDs in
