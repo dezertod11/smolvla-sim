@@ -7,6 +7,9 @@ class FakeInt8(torch.nn.Linear):
     def __init__(self, in_features, out_features, bias=True, **_):
         super().__init__(in_features, out_features, bias=bias)
 
+    def forward(self, value):
+        return torch.zeros(*value.shape[:-1], self.out_features, dtype=value.dtype)
+
 
 class FakeBnb:
     class nn:
@@ -30,3 +33,5 @@ def test_quantization_replaces_large_linears_and_reports_exclusions(monkeypatch)
     assert report["converted_modules"] == ["large"]
     assert report["converted_parameters"] == 4096
     assert sorted(report["excluded_modules"]) == ["lm_head", "small"]
+    output = result["large"](torch.ones(1, 64, dtype=torch.int8))
+    assert output.is_floating_point()

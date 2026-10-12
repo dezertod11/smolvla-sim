@@ -16,6 +16,14 @@ class QuantizationReport:
 def quantize_linear_int8(model, min_parameters=4096, excluded=("lm_head",)):
     import bitsandbytes as bnb
 
+    class FloatInputLinear8bitLt(bnb.nn.Linear8bitLt):
+        def forward(self, value):
+            # Some SmolVLA routing tensors reach Linear layers as int8. bnb casts
+            # internally but restores that dtype on output, breaking residual adds.
+            if not value.is_floating_point():
+                value = value.to(torch.bfloat16)
+            return super().forward(value)
+
     converted = []
     skipped = []
     parameter_count = 0
@@ -29,7 +37,7 @@ def quantize_linear_int8(model, min_parameters=4096, excluded=("lm_head",)):
                 if excluded_by_name or child.weight.numel() < min_parameters:
                     skipped.append(path)
                     continue
-                replacement = bnb.nn.Linear8bitLt(
+                replacement = FloatInputLinear8bitLt(
                     child.in_features,
                     child.out_features,
                     bias=child.bias is not None,
