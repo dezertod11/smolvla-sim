@@ -1,0 +1,17 @@
+{
+  "log_frequency": 50,
+  "points": 600,
+  "first": {
+    "step": 50,
+    "loss": 0.545,
+    "grad_norm": 3.276,
+    "learning_rate": 2.6e-06
+  },
+  "last": {
+    "step": 30000,
+    "loss": 0.047,
+    "grad_norm": 0.263,
+    "learning_rate": 2.5e-06
+  },
+  "minimum_loss": 0.045
+}

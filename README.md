@@ -191,6 +191,13 @@ AdamW с learning rate 1e-4. Обучаются action expert и проекци�
 новое пространство состояний и действий LIBERO. Используются глобальные
 mean/std закреплённого датасета, камеры переименовываются явным `rename_map`.
 
+Основной запуск завершил 30 000 шагов за 2 ч 59 мин на одной H100. Loss снизился
+с 0.545 на шаге 50 до 0.047; повторная загрузка итогового checkpoint и настоящий
+BF16 forward прошли успешно. CSV, summary и данные проверки checkpoint находятся
+в [`artifacts/results/training`](artifacts/results/training).
+
+![Кривая loss](artifacts/results/training/loss.png)
+
 Финальный протокол закреплён в
 [`configs/evaluation_protocol.json`](configs/evaluation_protocol.json): задачи
 0–9, по 10 эпизодов, seed 10000+, одинаковые начальные состояния для пяти

@@ -1,0 +1,10 @@
+{
+  "checkpoint": ".runtime/runs/h100-train-main-001/output/checkpoints/030000/pretrained_model",
+  "reload_loss": 0.05204809084534645,
+  "parameter_dtypes": {"torch.bfloat16": 474, "torch.float32": 26},
+  "trainable_parameters": 99880992,
+  "total_parameters": 450046176,
+  "bf16_autocast": true,
+  "peak_cuda_bytes": 1024908288,
+  "managed_job": "h100-checkpoint-final-001"
+}
