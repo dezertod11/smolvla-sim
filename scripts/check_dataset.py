@@ -9,7 +9,7 @@ import pyarrow.parquet as pq
 
 root = Path(__file__).resolve().parents[1]
 manifest = json.loads((root / "configs/libero_object_episodes.json").read_text())
-data = Path(os.environ["ROBOTICS_DATA_DIR"]) / "datasets/libero"
+data = Path(os.environ["ROBOTICS_DATA_DIR"]) / "datasets/libero_object"
 counts = Counter()
 for relative in manifest["selection"]["data_files"]:
     rows = pq.read_table(data / relative, columns=["episode_index", "task_index"]).to_pydict()

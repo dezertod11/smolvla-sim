@@ -14,7 +14,7 @@ from pathlib import Path
 
 def prepare(config, data, output, steps, batch_size):
     config = json.loads(json.dumps(config))
-    config["dataset"]["root"] = str(data / "datasets/libero")
+    config["dataset"]["root"] = str(data / "datasets/libero_object")
     config["policy"]["pretrained_path"] = str(data / "models/base")
     config["policy"]["vlm_model_name"] = str(data / "models/vlm")
     config["output_dir"] = str(output)

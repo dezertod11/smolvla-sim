@@ -42,6 +42,13 @@ def main():
     out = data / "prepared_artifacts.json"
     out.write_text(json.dumps(manifest, indent=2) + "\n")
     print(f"Prepared and hashed {len(manifest['files'])} files; manifest: {out}", flush=True)
+    overlay = data / "datasets/libero_object"
+    if overlay.exists():
+        shutil.rmtree(overlay)
+    import subprocess
+    import sys
+
+    subprocess.run([sys.executable, str(project / "scripts/prepare_libero_overlay.py")], check=True)
 
 
 if __name__ == "__main__":
