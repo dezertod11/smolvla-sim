@@ -352,7 +352,7 @@ async function loadModels() {
     const data = await r.json();
     const sel = document.getElementById('ckpt_sel');
     sel.innerHTML = '<option value="">— выбрать локальный —</option>';
-    data.models.forEach(m => {
+    data.models.filter(m => m.name !== 'vlm').forEach(m => {
       const opt = document.createElement('option');
       opt.value = m.path; opt.textContent = m.name;
       sel.appendChild(opt);
@@ -469,10 +469,12 @@ async function pollStatus() {
       const r = await fetch('/policy/status');
       const d = await r.json();
       if (d.status === 'running') {
+        if (document.getElementById('mode_badge').textContent !== 'AUTO') {
+          setMode('auto', `Модель: ${d.checkpoint.split('/').pop()}`);
+        }
         document.getElementById('mode_text').textContent =
           `Модель: ${d.checkpoint.split('/').pop()} | ` +
           `Действия: ${d.actions} | SR: ${d.successes}/${d.episodes}`;
-        if (!autoMode) { setMode('auto', `Модель: ${d.checkpoint.split('/').pop()}`); }
       } else if (d.status === 'loading') {
         document.getElementById('mode_text').textContent = 'Загрузка модели…';
         document.getElementById('btn_start').disabled = true;
@@ -483,7 +485,7 @@ async function pollStatus() {
           logLine('Модель остановлена', 'info');
         }
       }
-      if (d.episodes > seenEpisodes) {
+      if (d.episodes > seenEpisodes && d.last_result) {
         seenEpisodes = d.episodes;
         const cls = d.last_result && d.last_result.success ? 'ok' : 'err';
         const outcome = d.last_result.success ? 'SUCCESS' : 'FAIL';
