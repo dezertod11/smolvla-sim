@@ -20,6 +20,7 @@ setup(
             "runtime_subscriber = vla_bridge.runtime_probe:subscriber",
             "sim_node = vla_bridge.sim_node:main",
             "smolvla_node = vla_bridge.smolvla_node:main",
+            "web_teleop_node = vla_bridge.web_teleop_node:main",
         ]
     },
 )

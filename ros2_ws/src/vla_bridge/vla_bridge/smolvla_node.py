@@ -14,13 +14,14 @@ from lerobot.policies.factory import make_policy, make_pre_post_processors
 from lerobot.policies.smolvla.configuration_smolvla import SmolVLAConfig
 from rclpy.node import Node
 from sensor_msgs.msg import Image
-from std_msgs.msg import Float32MultiArray
+from std_msgs.msg import Bool, Float32MultiArray
 
 from smolvla_service.async_inference import AsyncInference
 from smolvla_service.conversion import action_to_list, action_to_message
 from smolvla_service.features import camera_rename_map
 from smolvla_service.quantization import quantize_linear_int8
 from smolvla_service.ros_config import SUPPORTED_PRECISIONS
+from smolvla_service.snapshots import fresh_synchronized_snapshot
 
 
 def decode_image(message):
@@ -81,6 +82,10 @@ class PolicyRunner:
         action = self.env_post({"action": action})["action"]
         return action_to_list(action[0].float().cpu().numpy())
 
+    def reset(self):
+        """Clear the action chunk cached by SmolVLA between episodes."""
+        self.policy.reset()
+
 
 class SmolVLANode(Node):
     def __init__(self):
@@ -91,6 +96,7 @@ class SmolVLANode(Node):
         self.declare_parameter("n_action_steps", 10)
         self.declare_parameter("inference_hz", 10.0)
         self.declare_parameter("input_timeout_s", 2.0)
+        self.declare_parameter("input_sync_tolerance_s", 0.08)
         self.declare_parameter("device", "cuda")
         self.declare_parameter("precision", "bf16")
         checkpoint = self.get_parameter("checkpoint").value
@@ -100,6 +106,9 @@ class SmolVLANode(Node):
         device = self.get_parameter("device").value
         precision = self.get_parameter("precision").value
         self.timeout = float(self.get_parameter("input_timeout_s").value)
+        self.sync_tolerance = float(
+            self.get_parameter("input_sync_tolerance_s").value
+        )
         self.lock = Lock()
         self.inputs = {}
         self.last_warning = 0.0
@@ -107,11 +116,19 @@ class SmolVLANode(Node):
         self.create_subscription(Image, "/camera/image_raw", self.on_camera, 1)
         self.create_subscription(Image, "/camera/wrist/image_raw", self.on_wrist, 1)
         self.create_subscription(Float32MultiArray, "/robot_state", self.on_state, 1)
+        self.create_subscription(Bool, "/sim/reset_done", self.on_sim_reset, 1)
         self.runner = AsyncInference(
             PolicyRunner(checkpoint, vlm_model, task, steps, device, precision)
         )
         period = 1.0 / float(self.get_parameter("inference_hz").value)
         self.create_timer(period, self.tick)
+        self.get_logger().info("SMOLVLA_READY")
+
+    def on_sim_reset(self, _message):
+        self.runner.reset()
+        with self.lock:
+            self.inputs.clear()
+        self.last_warning = 0.0
 
     def store(self, key, value):
         with self.lock:
@@ -139,19 +156,24 @@ class SmolVLANode(Node):
             self.get_logger().error(f"Policy inference failed: {error}")
         now = time.monotonic()
         with self.lock:
-            ready = all(key in self.inputs for key in ("camera", "wrist", "state"))
-            fresh = ready and all(now - value[1] <= self.timeout for value in self.inputs.values())
-            bundle = (
-                tuple(self.inputs[key][0] for key in ("camera", "wrist", "state"))
-                if fresh
-                else None
+            bundle, snapshot = fresh_synchronized_snapshot(
+                self.inputs,
+                now=now,
+                timeout_s=self.timeout,
+                tolerance_s=self.sync_tolerance,
             )
         if bundle is None:
             if now - self.last_warning >= 5.0:
                 self.get_logger().warning("Waiting for fresh camera and robot-state messages")
                 self.last_warning = now
             return
-        self.runner.submit(bundle)
+        if self.runner.submit(bundle):
+            # Never run two actions from the exact same observation.  Keep newer
+            # callbacks if they arrived after this snapshot was assembled.
+            with self.lock:
+                for key, value in snapshot.items():
+                    if self.inputs.get(key) is value:
+                        self.inputs.pop(key, None)
 
     def destroy_node(self):
         self.runner.close()

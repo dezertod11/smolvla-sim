@@ -14,5 +14,6 @@ smolvla:
     n_action_steps: 10
     inference_hz: 10.0
     input_timeout_s: 2.0
+    input_sync_tolerance_s: 0.08
     device: cuda
     precision: bf16

@@ -37,6 +37,13 @@ services:
       - bash
       - scripts/run_ros2_episode.sh
       - /workspace/ros2_ws/src/vla_bridge/config/libero_object_own_final.yaml
+  teleop:
+    <<: *service
+    ports:
+      - "${TELEOP_PORT:-8890}:8888"
+    command:
+      - bash
+      - scripts/run_ros2_teleop.sh
 
 volumes:
   dev-home:

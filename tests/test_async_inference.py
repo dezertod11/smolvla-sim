@@ -51,3 +51,46 @@ def test_policy_error_surfaces_on_poll():
             raise AssertionError("Expected policy error")
     finally:
         runner.close()
+
+
+def test_reset_waits_for_stale_inference_then_clears_policy_state():
+    release = threading.Event()
+    started = threading.Event()
+
+    class StatefulPolicy:
+        def __init__(self):
+            self.values = []
+            self.reset_calls = 0
+
+        def __call__(self, value):
+            started.set()
+            release.wait(timeout=2)
+            self.values.append(value)
+            return [value] * 7
+
+        def reset(self):
+            self.values.clear()
+            self.reset_calls += 1
+
+    policy = StatefulPolicy()
+    runner = AsyncInference(policy)
+    reset_thread = None
+    try:
+        assert runner.submit("stale")
+        assert started.wait(timeout=1)
+        reset_thread = threading.Thread(target=runner.reset)
+        reset_thread.start()
+        time.sleep(0.01)
+        assert reset_thread.is_alive()
+
+        release.set()
+        reset_thread.join(timeout=1)
+        assert not reset_thread.is_alive()
+        assert policy.reset_calls == 1
+        assert policy.values == []
+        assert runner.poll() is None
+    finally:
+        release.set()
+        if reset_thread is not None:
+            reset_thread.join(timeout=1)
+        runner.close()

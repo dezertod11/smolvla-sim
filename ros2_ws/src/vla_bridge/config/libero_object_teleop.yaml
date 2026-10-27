@@ -1,0 +1,11 @@
+libero_sim:
+  ros__parameters:
+    suite: libero_object
+    task_id: 0
+    init_state: 0
+    max_actions: 1000
+    stop_after_episode: false
+    observation_hz: 10.0
+web_teleop:
+  ros__parameters:
+    port: 8888
