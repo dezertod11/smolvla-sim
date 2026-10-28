@@ -32,5 +32,23 @@ class AsyncInference:
         with self._lock:
             return self._future is not None
 
+    def reset(self):
+        """Finish stale work, clear policy state, and start the next episode fresh.
+
+        A running thread cannot be cancelled reliably.  Wait for it before resetting
+        the policy so it cannot refill the action queue after the reset.
+        """
+        with self._lock:
+            future, self._future = self._future, None
+        if future is not None and not future.cancel():
+            try:
+                future.result()
+            except Exception:
+                # The failed result belongs to the previous episode and is discarded.
+                pass
+        reset = getattr(self._policy, "reset", None)
+        if callable(reset):
+            reset()
+
     def close(self):
         self._executor.shutdown(wait=True, cancel_futures=True)

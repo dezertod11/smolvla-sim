@@ -1,0 +1,24 @@
+{
+  "tested_source_commit": "e23c04e",
+  "run_date": "2026-10-27",
+  "platform": "NVIDIA GeForce RTX 5070 Ti",
+  "checkpoint": "/data/models/own-final",
+  "vlm_model": "/data/models/vlm",
+  "suite": "libero_object",
+  "task_id": 0,
+  "init_state": 0,
+  "instruction": "pick up the alphabet soup and place it in the basket",
+  "precision": "bf16",
+  "n_action_steps": 10,
+  "result": {
+    "success": true,
+    "actions": 142
+  },
+  "ui_status_verified": [
+    "loading",
+    "running",
+    "episode_result",
+    "session_success_rate_1_of_1"
+  ],
+  "scope": "Single interactive smoke episode; not the acceptance success-rate evaluation."
+}

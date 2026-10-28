@@ -13,3 +13,5 @@ services:
       - /usr/lib/wsl:/usr/lib/wsl:ro
   runtime:
     <<: *wsl-gpu
+  teleop:
+    <<: *wsl-gpu
